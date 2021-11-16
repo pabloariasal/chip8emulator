@@ -1,1 +1,1 @@
-# chip8emulator
+# C++ CHIP-8 Emulator

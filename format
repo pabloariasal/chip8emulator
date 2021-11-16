@@ -1,0 +1,3 @@
+#!/bin/sh
+files_to_format=$(git ls-files | grep -E '.*\.(cpp|h|hpp)$')
+echo "$files_to_format" | xargs clang-format --style=file -i
