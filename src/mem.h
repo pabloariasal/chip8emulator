@@ -4,7 +4,7 @@
 #include <istream>
 
 class Memory {
-public:
+ public:
   using Index = uint16_t;
 
   constexpr static Index ROM_BEGIN = 0x200;
@@ -15,6 +15,6 @@ public:
 
   void dump(Index start_at) const;
 
-private:
+ private:
   uint8_t mem[4096]{};
 };
