@@ -16,5 +16,5 @@ public:
   void dump(Index start_at) const;
 
 private:
-  uint8_t mem[4096];
+  uint8_t mem[4096]{};
 };
