@@ -13,7 +13,7 @@ class Memory {
 
   uint8_t at(Index i) const { return mem[i]; }
 
-  void dump(Index start_at) const;
+  void dump(Index start_at = 0) const;
 
  private:
   uint8_t mem[4096]{};

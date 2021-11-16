@@ -19,7 +19,7 @@ void Memory::loadROM(std::istream &is) {
   std::copy(std::cbegin(b), std::cend(b), std::begin(mem) + ROM_BEGIN);
 }
 
-void Memory::dump(Index start_at = 0) const {
+void Memory::dump(Index start_at) const {
   Index i{start_at};
   for (const auto &e : mem) {
     printf("0x%04x %02x\n", i++, e);
