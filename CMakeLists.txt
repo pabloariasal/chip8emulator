@@ -15,6 +15,7 @@ include(${CMAKE_BINARY_DIR}/conan.cmake)
 
 conan_cmake_configure(REQUIRES
                           catch2/2.13.7
+                          sdl/2.0.16
                       GENERATORS cmake_find_package
                       OPTIONS catch2:with_main=True)
 
@@ -27,7 +28,7 @@ conan_cmake_install(PATH_OR_REFERENCE .
 #####################################################
 # Dependencies
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
-
+find_package(SDL2 2.0.16 REQUIRED)
 
 #####################################################
 # Library
@@ -40,8 +41,10 @@ add_compile_options(-Wall -Wextra -pedantic -Werror)
 add_library(chip8_lib)
 target_sources(chip8_lib
     PRIVATE
-    src/mem.cpp)
+    src/mem.cpp
+    src/display.cpp)
 target_include_directories(chip8_lib PUBLIC src)
+target_link_libraries(chip8_lib PUBLIC SDL2::SDL2)
 
 add_executable(chip8 src/main.cpp)
 target_link_libraries(chip8 PRIVATE chip8_lib)

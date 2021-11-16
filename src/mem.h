@@ -9,11 +9,11 @@ class Memory {
 
   constexpr static Index ROM_BEGIN = 0x200;
 
-  void loadROM(std::istream &istream);
+  bool loadROM(std::istream &istream);
 
   uint8_t at(Index i) const { return mem[i]; }
 
-  void dump(Index start_at = 0) const;
+  void dump() const;
 
  private:
   uint8_t mem[4096]{};

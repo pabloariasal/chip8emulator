@@ -1,6 +1,9 @@
+#include <SDL.h>
+
 #include <fstream>
 #include <iostream>
 
+#include "display.h"
 #include "mem.h"
 
 int main(int argc, char *argv[]) {
@@ -18,7 +21,19 @@ int main(int argc, char *argv[]) {
 
   Memory mem;
   mem.loadROM(is);
-  mem.dump();
+
+  Display dis{25, 64, 32};
+  std::vector<uint32_t> v(64 * 32);
+  v[0] = 0x0000ff00;
+  v.back() = 0xff000000;
+
+  SDL_Event event;
+
+  while (true) {
+    SDL_PollEvent(&event);
+    if (event.type == SDL_QUIT) break;
+    dis.update(v);
+  }
 
   return 0;
 }
