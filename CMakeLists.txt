@@ -18,4 +18,5 @@ target_include_directories(chip8_lib PUBLIC src)
 add_executable(chip8 src/main.cpp)
 target_link_libraries(chip8 PRIVATE chip8_lib)
 
+enable_testing()
 add_subdirectory(test)
