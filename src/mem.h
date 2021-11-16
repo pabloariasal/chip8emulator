@@ -13,7 +13,7 @@ public:
 
   uint8_t at(Index i) const { return mem[i]; }
 
-  void dump() const;
+  void dump(Index start_at) const;
 
 private:
   uint8_t mem[4096];
