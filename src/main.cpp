@@ -23,7 +23,7 @@ int main(int argc, char *argv[]) {
   Memory mem;
   mem.loadROM(is);
 
-  auto bitmap = initializeBitmap(64, 32, Color::WHITE);
+  auto bitmap = Bitmap::initialize(64, 32, Color::WHITE);
   auto screen = SDLScreen(25, bitmap);
 
   bitmap.data.front() = Color::BLACK;

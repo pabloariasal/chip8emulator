@@ -3,7 +3,7 @@
 
 #include "mem.h"
 
-TEST_CASE("ROM is loaded into memory", "[mem]") {
+TEST_CASE("ROM is loaded into memory", "[memory]") {
   std::istringstream stream("abc");
 
   Memory mem;

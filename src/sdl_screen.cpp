@@ -28,7 +28,7 @@ SDLScreen::~SDLScreen() {
 
 void SDLScreen::render(const Bitmap& bitmap) {
   SDL_UpdateTexture(texture_, nullptr, bitmap.data.data(),
-                    sizeof(ColorT) * bitmap.width);
+                    sizeof(Color) * bitmap.width);
   SDL_RenderClear(renderer_);
   SDL_RenderCopy(renderer_, texture_, NULL, NULL);
   SDL_RenderPresent(renderer_);
