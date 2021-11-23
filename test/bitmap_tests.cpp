@@ -8,10 +8,8 @@ TEST_CASE("Bitmaps work as expected", "[bitmap]") {
   //  4  5  6  7
   //  8  9  10 11
   //  12 13 14 15
-  auto v = std::vector<int>(16, 0);
-  std::iota(v.begin(), v.end(), 0);
-
-  auto buff = PixelBuffer<int>{4, v};
+  auto buff = PixelBuffer<int>::init(4, 4, 0);
+  std::iota(buff.begin(), buff.end(), 0);
 
   // TODO: check error cases
   // TODO: test post and pre increment
@@ -48,7 +46,7 @@ TEST_CASE("Bitmaps work as expected", "[bitmap]") {
   }
 
   SECTION("bitmaps can modify underlying data") {
-    std::fill(v.begin(), v.end(), 0);
+    std::fill(buff.begin(), buff.end(), 0);
 
     // last column
     auto bm1 = Bitmap<int>(1, 4, 3, 0, buff);

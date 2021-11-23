@@ -1,9 +1,7 @@
 #include <catch2/catch.hpp>
 #include <unordered_set>
 
-#include "bitmap.h"
 #include "display.h"
-#include "sprite.h"
 
 namespace {
 
@@ -12,21 +10,22 @@ struct Pair {
   int y;
 };
 
-/* std::unordered_set<size_t> indicesFromPairs(std::initializer_list<Pair> pairs, */
-/*                                             const Bitmap& bm) { */
-/*   std::unordered_set<size_t> res; */
-/*   res.reserve(pairs.size()); */
-/*   std::transform(pairs.begin(), pairs.end(), std::inserter(res, res.end()), */
-/*                  [&bm](const auto& p) { return bm.index(p.x, p.y); }); */
-/*   return res; */
-/* } */
-
-std::unordered_set<size_t> indicesWithColor(const Bitmap& bm, Color color) {
+std::unordered_set<size_t> indicesFromPairs(std::initializer_list<Pair> pairs,
+                                            const PixelBuffer<Color>& buf) {
   std::unordered_set<size_t> res;
-  res.reserve(bm.data.size());
+  res.reserve(pairs.size());
+  std::transform(pairs.begin(), pairs.end(), std::inserter(res, res.end()),
+                 [&buf](const auto& p) { return p.x * buf.width() + p.y; });
+  return res;
+}
 
-  for (size_t i = 0; i < bm.data.size(); ++i) {
-    if (bm.data[i] == color) {
+std::unordered_set<size_t> indicesWithColor(const PixelBuffer<Color>& buf,
+                                            Color color) {
+  std::unordered_set<size_t> res;
+  res.reserve(buf.data().size());
+
+  for (size_t i = 0; i < buf.data().size(); ++i) {
+    if (buf.data()[i] == color) {
       res.insert(i);
     }
   }
@@ -34,64 +33,66 @@ std::unordered_set<size_t> indicesWithColor(const Bitmap& bm, Color color) {
 }
 }  // namespace
 
-TEST_CASE("bitmap initialization", "[display]") {
-  SECTION("empty bitmaps can be created") {
-    const auto empty = Bitmap::initialize(0, 0, Color::BLACK);
-
-    REQUIRE(empty.width == 0);
-    REQUIRE(empty.height == 0);
-    REQUIRE(empty.data.empty());
-  }
-  SECTION("bitmaps are correctly initialized") {
-    constexpr auto width = 64;
-    constexpr auto height = 32;
-    const auto bitmap = Bitmap::initialize(width, height, Color::BLACK);
-
-    REQUIRE(bitmap.width == width);
-    REQUIRE(bitmap.height == height);
-    REQUIRE(bitmap.data.size() == width * height);
-    REQUIRE(bitmap.data.front() == Color::BLACK);
-    REQUIRE(bitmap.data.back() == Color::BLACK);
-  }
-}
-
 TEST_CASE("sprite rendering", "[display]") {
-  auto bm = Bitmap::initialize(3, 3);
+  //  0  1  2
+  //  3  4  5
+  //  6  7  8
+  auto buf = PixelBuffer<Color>::init(3, 3, Color::WHITE);
+
   SECTION("0x0 sprite") {
-    drawSprite(Sprite{0, 0, 0, {}}, bm);
-    REQUIRE(indicesWithColor(bm, Color::BLACK).empty());
+    drawSprite(0, 0, {0, {}}, buf);
+    REQUIRE(indicesWithColor(buf, Color::BLACK).empty());
   }
 
-  /* SECTION("2x1 sprite") { */
-  /*   drawSprite({1, 1, 2, 1}, bm); */
+  SECTION("all-white sprite has no effect") {
+    buf.data().front() = Color::BLACK;
+    REQUIRE(indicesWithColor(buf, Color::BLACK).size() == 1);
 
-  /*   const auto expected = indicesFromPairs({{1, 1}, {1, 2}}, bm); */
-  /*   const auto actual = indicesWithColor(bm, Color::BLACK); */
-  /*   REQUIRE(expected == actual); */
-  /* } */
+    auto sprite = PixelBuffer<Color>::init(2, 2, Color::WHITE);
+    drawSprite(0, 0, sprite, buf);
+    REQUIRE(indicesWithColor(buf, Color::BLACK).size() == 1);
+  }
 
-  /* SECTION("sprite with hole") { */
-  /*   // paint the whole bitmap black */
-  /*   drawSprite({0, 0, 3, 3}, bm); */
+  SECTION("draw all-black sprite on screen") {
+    auto sprite = PixelBuffer<Color>::init(2, 2, Color::BLACK);
+    drawSprite(0, 1, sprite, buf);
 
-  /*   REQUIRE(indicesWithColor(bm, Color::WHITE).empty()); */
+    const auto expected =
+        indicesFromPairs({{0, 1}, {0, 2}, {1, 1}, {1, 2}}, buf);
+    const auto actual = indicesWithColor(buf, Color::BLACK);
+    REQUIRE(expected == actual);
+  }
 
-  /*   // now paint the middle pixel black, should turn white */
-  /*   drawSprite({1, 1, 1, 1}, bm); */
+  SECTION("flip two pixels") {
+    buf.data().front() = Color::BLACK;
+    buf.data().back() = Color::BLACK;
+    REQUIRE(indicesWithColor(buf, Color::BLACK).size() == 2);
 
-  /*   const auto expected = indicesFromPairs({{1, 1}}, bm); */
-  /*   const auto actual = indicesWithColor(bm, Color::WHITE); */
-  /*   REQUIRE(expected == actual); */
-  /* } */
-  /* SECTION("sprite with coordinate overflow") { */
-  /*   // coordinates outside the bitmap should wrap */
+    auto sprite = PixelBuffer<Color>::init(3, 3, Color::WHITE);
+    sprite.data().front() = Color::BLACK;
+    sprite.data().back() = Color::BLACK;
+    drawSprite(0, 0, sprite, buf);
 
-  /*   // x = 7, y = 8 should be the same as x = 1, y = 2 */
-  /*   drawSprite({7, 8, 1, 1}, bm); */
+    REQUIRE(indicesWithColor(buf, Color::BLACK).empty());
+  }
 
-  /*   const auto expected = indicesFromPairs({{1, 2}}, bm); */
-  /*   const auto actual = indicesWithColor(bm, Color::BLACK); */
-  /*   REQUIRE(expected == actual); */
-  /* } */
-  /* SECTION("sprite with draw overflow") {} */
+  SECTION("draw middle row and col") {
+    auto sprite_row = PixelBuffer<Color>::init(3, 1, Color::BLACK);
+    auto sprite_col = PixelBuffer<Color>::init(1, 3, Color::BLACK);
+    drawSprite(1, 0, sprite_row, buf);
+    drawSprite(0, 1, sprite_col, buf);
+
+    const auto expected =
+        indicesFromPairs({{0, 1}, {1, 0}, {1, 2}, {2, 1}}, buf);
+    const auto actual = indicesWithColor(buf, Color::BLACK);
+    REQUIRE(expected == actual);
+  }
+
+  SECTION("sprite with coordinate overflow") {
+    // TODO:
+  }
+
+  SECTION("sprite with draw overflow") {
+    // TODO:
+  }
 }

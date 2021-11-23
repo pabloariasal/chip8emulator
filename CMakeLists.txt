@@ -42,7 +42,7 @@ add_library(chip8_lib)
 target_sources(chip8_lib
     PRIVATE
     src/mem.cpp
-    # src/display.cpp
+    src/display.cpp
     src/sdl_screen.cpp
     )
 target_include_directories(chip8_lib PUBLIC src 3rdparty)

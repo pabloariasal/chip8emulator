@@ -9,7 +9,7 @@
 template <typename T>
 class Bitmap {
  public:
-  Bitmap(int width, int height, int col, int row, PixelBuffer<T> buff)
+  Bitmap(int width, int height, int col, int row, PixelBuffer<T>& buff)
       : width_{width}, height_{height}, col_{col}, row_{row}, buff_{buff} {
     // TODO: error handling
   }
@@ -22,7 +22,7 @@ class Bitmap {
     using pointer = T*;
     using reference = T&;
 
-    Iterator(typename tcb::span<T>::iterator it, int row_width, int step)
+    Iterator(typename PixelBuffer<T>::iterator it, int row_width, int step)
         : it_{it}, advanced_in_row_{0}, row_width_{row_width}, step_{step} {}
 
     reference operator*() const { return *it_; }
@@ -55,31 +55,29 @@ class Bitmap {
     };
 
    private:
-    typename tcb::span<T>::iterator it_;
+    typename PixelBuffer<T>::iterator it_;
     int advanced_in_row_{0};
     int row_width_;
     int step_;
   };
 
   Iterator begin() {
-    auto it = buff_.data.begin() + offset(row_, col_);
-    return Iterator(it, width_, buff_.elementsPerRow);
+    auto it = buff_.begin() + offset(row_, col_);
+    return Iterator(it, width_, buff_.width());
   }
 
   Iterator end() {
     auto a = offset(row_ + height_, col_);
-    auto it = buff_.data.begin() + a;
-    return Iterator(it, width_, buff_.elementsPerRow);
+    auto it = buff_.begin() + a;
+    return Iterator(it, width_, buff_.width());
   }
 
  private:
-  int offset(int row, int col) const {
-    return row * buff_.elementsPerRow + col;
-  }
+  int offset(int row, int col) const { return row * buff_.width() + col; }
 
   int width_;
   int height_;
   int col_;
   int row_;
-  PixelBuffer<T> buff_;
+  PixelBuffer<T>& buff_;
 };
