@@ -7,6 +7,9 @@
 #include "mem.h"
 #include "sdl_screen.h"
 
+constexpr auto SCREEN_WIDTH = 64;
+constexpr auto SCREEN_HEIGHT = 32;
+
 int main(int argc, char *argv[]) {
   if (argc != 2) {
     std::cout << "usage "
@@ -23,18 +26,15 @@ int main(int argc, char *argv[]) {
   Memory mem;
   mem.loadROM(is);
 
-  auto bitmap = Bitmap::initialize(64, 32, Color::WHITE);
-  auto screen = SDLScreen(25, bitmap);
-
-  bitmap.data.front() = Color::BLACK;
-  bitmap.data.back() = Color::BLACK;
+  std::vector<Color> display(SCREEN_WIDTH * SCREEN_HEIGHT, Color::WHITE);
+  auto screen = SDLScreen(25, SCREEN_WIDTH, SCREEN_HEIGHT);
 
   SDL_Event event;
 
   while (true) {
     SDL_PollEvent(&event);
     if (event.type == SDL_QUIT) break;
-    screen.render(bitmap);
+    screen.render(display);
   }
 
   return 0;

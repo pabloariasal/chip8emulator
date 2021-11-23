@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "bitmap.h"
+#include "color.h"
 
 class Screen {
  public:
@@ -14,5 +14,5 @@ class Screen {
   Screen(Screen&&) = delete;
   Screen& operator=(Screen&&) = delete;
 
-  virtual void render(const Bitmap&) = 0;
+  virtual void render(const std::vector<Color>&) = 0;
 };
