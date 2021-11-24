@@ -1,17 +1,38 @@
 #pragma once
 
+#include <exception>
 #include <iterator>
 #include <span.hpp>
 
 #include "pixel_buffer.h"
 
+struct BitmapOutOfBoundsException : public std::exception {
+  const char* what() const throw() override {
+    return "The bitmap is out of bounds";
+  }
+};
+
 // Bitmap is a non-owning view over a rectangular region of pixel data
+// TODO: rename this class?
 template <typename T>
 class Bitmap {
  public:
   Bitmap(int width, int height, int col, int row, PixelBuffer<T>& buff)
       : width_{width}, height_{height}, col_{col}, row_{row}, buff_{buff} {
-    // TODO: error handling
+    if (width < 0 || height < 0 || row < 0 || col < 0) {
+      throw BitmapOutOfBoundsException{};
+    }
+    // check that the view is inside the buffer's boundaries
+    const auto view_top_left = std::pair<int, int>{row, col};
+    const auto view_bottom_right =
+        std::pair<int, int>{row + height, col + width};
+
+    for (auto p : {view_top_left, view_bottom_right}) {
+      if (p.first < 0 || p.second < 0 || p.first > buff.height() ||
+          p.second > buff.width()) {
+        throw BitmapOutOfBoundsException{};
+      }
+    }
   }
 
   struct Iterator {

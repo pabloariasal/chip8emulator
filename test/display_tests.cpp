@@ -70,7 +70,7 @@ TEST_CASE("sprite rendering", "[display]") {
 
   SECTION("draw all-black sprite on screen") {
     auto sprite = PixelBuffer<Color>::init(2, 2, Color::BLACK);
-    REQUIRE(drawSprite(0, 1, sprite, buf) == true);
+    REQUIRE(drawSprite(0, 1, sprite, buf));
 
     const auto expected =
         indicesFromPairs({{0, 1}, {0, 2}, {1, 1}, {1, 2}}, buf);
@@ -86,7 +86,7 @@ TEST_CASE("sprite rendering", "[display]") {
     auto sprite = PixelBuffer<Color>::init(3, 3, Color::WHITE);
     sprite.data().front() = Color::BLACK;
     sprite.data().back() = Color::BLACK;
-    REQUIRE(drawSprite(0, 0, sprite, buf) == true);
+    REQUIRE(drawSprite(0, 0, sprite, buf));
 
     REQUIRE(indicesWithColor(buf, Color::BLACK).empty());
   }
@@ -94,8 +94,8 @@ TEST_CASE("sprite rendering", "[display]") {
   SECTION("draw middle row and col") {
     auto sprite_row = PixelBuffer<Color>::init(3, 1, Color::BLACK);
     auto sprite_col = PixelBuffer<Color>::init(1, 3, Color::BLACK);
-    REQUIRE(drawSprite(1, 0, sprite_row, buf) == true);
-    REQUIRE(drawSprite(0, 1, sprite_col, buf) == true);
+    REQUIRE(drawSprite(1, 0, sprite_row, buf));
+    REQUIRE(drawSprite(0, 1, sprite_col, buf));
 
     const auto expected =
         indicesFromPairs({{0, 1}, {1, 0}, {1, 2}, {2, 1}}, buf);
@@ -109,7 +109,7 @@ TEST_CASE("sprite rendering", "[display]") {
 
     auto sprite = PixelBuffer<Color>::init(1, 1, Color::BLACK);
     // row = 5, col = 3 correspond to row = 2, col = 0 in our 3x3 screen
-    REQUIRE(drawSprite(5, 3, sprite, buf) == true);
+    REQUIRE(drawSprite(5, 3, sprite, buf));
 
     const auto expected = indicesFromPairs({{2, 0}}, buf);
     const auto actual = indicesWithColor(buf, Color::BLACK);
@@ -118,10 +118,10 @@ TEST_CASE("sprite rendering", "[display]") {
 
   SECTION("sprite with draw overflow") {
     auto sprite = PixelBuffer<Color>::init(100, 100, Color::BLACK);
-    REQUIRE(drawSprite(0, 0, sprite, buf) == true);
+    REQUIRE(drawSprite(0, 0, sprite, buf));
     REQUIRE(indicesWithColor(buf, Color::BLACK).size() == buf.data().size());
 
-    REQUIRE(drawSprite(4, 4, sprite, buf) == true);
+    REQUIRE(drawSprite(4, 4, sprite, buf));
     REQUIRE(indicesWithColor(buf, Color::BLACK).size() == 5);
   }
 }

@@ -11,14 +11,23 @@ TEST_CASE("Bitmaps work as expected", "[bitmap]") {
   auto buff = PixelBuffer<int>::init(4, 4, 0);
   std::iota(buff.begin(), buff.end(), 0);
 
-  // TODO: check error cases
   // TODO: test post and pre increment
 
   SECTION("empty bitmap") {
     auto bm = Bitmap<int>(0, 0, 0, 0, buff);
-    (void)bm;
-    // TODO: how should iterators behave in this case?
-    /* REQUIRE(bm.begin() == bm.end()); */
+    REQUIRE(bm.begin() == bm.end());
+  }
+
+  SECTION("bitmap out of bounds throws an error") {
+    REQUIRE_THROWS_AS(Bitmap<int>(0, 0, 0, -1, buff), BitmapOutOfBoundsException);
+    REQUIRE_THROWS_AS(Bitmap<int>(0, 0, -1, 0, buff), BitmapOutOfBoundsException);
+    REQUIRE_THROWS_AS(Bitmap<int>(0, -1, 0, 0, buff), BitmapOutOfBoundsException);
+    REQUIRE_THROWS_AS(Bitmap<int>(-1, 0, 0, 0, buff), BitmapOutOfBoundsException);
+
+    REQUIRE_THROWS_AS(Bitmap<int>(0, 0, 10, 2, buff), BitmapOutOfBoundsException);
+    REQUIRE_THROWS_AS(Bitmap<int>(0, 0, 2, 10, buff), BitmapOutOfBoundsException);
+    REQUIRE_THROWS_AS(Bitmap<int>(10, 0, 2, 2, buff), BitmapOutOfBoundsException);
+    REQUIRE_THROWS_AS(Bitmap<int>(0, 10, 2, 2, buff), BitmapOutOfBoundsException);
   }
 
   SECTION("bitmap iterator works as expected 1/2") {
