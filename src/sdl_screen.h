@@ -11,11 +11,11 @@ class SDLScreen : public Screen {
   SDLScreen(float scale, int width, int height);
   ~SDLScreen() override;
 
-  void render(const std::vector<Color>&) override;
+  void render(const tcb::span<const Color>& data) override;
 
  private:
-  std::size_t width_;
-  std::size_t height_;
+  int width_;
+  int height_;
 
   SDL_Window* window_ = nullptr;
   SDL_Renderer* renderer_ = nullptr;

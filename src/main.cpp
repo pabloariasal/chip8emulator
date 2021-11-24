@@ -6,6 +6,7 @@
 #include "display.h"
 #include "mem.h"
 #include "sdl_screen.h"
+#include "pixel_buffer.h"
 
 constexpr auto SCREEN_WIDTH = 64;
 constexpr auto SCREEN_HEIGHT = 32;
@@ -23,10 +24,15 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 
-  Memory mem;
+  auto mem = Memory{};
   mem.loadROM(is);
 
-  std::vector<Color> display(SCREEN_WIDTH * SCREEN_HEIGHT, Color::WHITE);
+  auto display = PixelBuffer<Color>::init(SCREEN_WIDTH, SCREEN_HEIGHT, Color::WHITE) ;
+  display.data().front() = Color::BLACK;
+  display.data()[63] = Color::BLACK;
+  display.data()[31 * 64] = Color::BLACK;
+  display.data().back() = Color::BLACK;
+
   auto screen = SDLScreen(25, SCREEN_WIDTH, SCREEN_HEIGHT);
 
   SDL_Event event;
@@ -34,7 +40,7 @@ int main(int argc, char *argv[]) {
   while (true) {
     SDL_PollEvent(&event);
     if (event.type == SDL_QUIT) break;
-    screen.render(display);
+    screen.render(display.data());
   }
 
   return 0;

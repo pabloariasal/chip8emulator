@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include "span.hpp"
 
 #include "color.h"
 
@@ -14,5 +14,5 @@ class Screen {
   Screen(Screen&&) = delete;
   Screen& operator=(Screen&&) = delete;
 
-  virtual void render(const std::vector<Color>&) = 0;
+  virtual void render(const tcb::span<const Color>& data) = 0;
 };
