@@ -20,13 +20,21 @@ namespace {
 
 bool drawSprite(int row, int col, const PixelBuffer<Color>& sprite,
                 PixelBuffer<Color>& screen) {
-  const auto w = sprite.width();
-  const auto h = sprite.height();
+  if (screen.width() == 0 || screen.height() == 0 || sprite.width() == 0 ||
+      sprite.height() == 0) {
+    return false;
+  }
 
-  const auto x =
-      col;  // sprite.data.width() != 0 ? sprite.x % bitmap.width() : 0;
-  const auto y =
-      row;  // sprite.data.height() != 0 ? sprite.y % bitmap.height() : 0;
+  // normalize screen coordinates
+  const auto x = col % screen.width();
+  const auto y = row % screen.height();
+
+  // clip sprite
+  const auto w =
+      x + sprite.width() > screen.width() ? screen.width() - x : sprite.width();
+  const auto h = y + sprite.height() > screen.height() ? screen.height() - y
+                                                       : sprite.height();
+
   auto screen_view = Bitmap<Color>(w, h, x, y, screen);
   auto sprite_view =
       Bitmap<Color>(w, h, 0, 0, const_cast<PixelBuffer<Color>&>(sprite));
@@ -44,5 +52,5 @@ bool drawSprite(int row, int col, const PixelBuffer<Color>& sprite,
         return c;
       });
 
-  return false;
+  return flipped;
 }
