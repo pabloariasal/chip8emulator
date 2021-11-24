@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cassert>
 #include <vector>
 
 #include "span.hpp"
@@ -11,7 +12,7 @@ class PixelBuffer {
 
   PixelBuffer(int row_width, std::vector<T>&& data)
       : row_width_{row_width}, data_{std::move(data)} {
-    // TODO: check invariants
+    assert(row_width == 0 || data.size() / row_width == 0);
   }
 
   static PixelBuffer<T> init(int width, int height, T c) {
