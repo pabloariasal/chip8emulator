@@ -40,22 +40,22 @@ TEST_CASE("sprite rendering", "[display]") {
   auto buf = PixelBuffer<Color>::init(3, 3, Color::WHITE);
 
   SECTION("0x0 sprite") {
-    REQUIRE(drawSprite(0, 0, {0, {}}, buf) == false);
+    REQUIRE_FALSE(drawSprite(0, 0, {0, {}}, buf));
     REQUIRE(indicesWithColor(buf, Color::BLACK).empty());
 
     auto sp1 = PixelBuffer<Color>::init(0, 5, Color::BLACK);
-    REQUIRE(drawSprite(0, 0, sp1, buf) == false);
+    REQUIRE_FALSE(drawSprite(0, 0, sp1, buf));
     REQUIRE(indicesWithColor(buf, Color::BLACK).empty());
 
     auto sp2 = PixelBuffer<Color>::init(5, 0, Color::BLACK);
-    REQUIRE(drawSprite(0, 0, sp2, buf) == false);
+    REQUIRE_FALSE(drawSprite(0, 0, sp2, buf));
     REQUIRE(indicesWithColor(buf, Color::BLACK).empty());
   }
 
   SECTION("0x0 bitmap") {
     auto empty = PixelBuffer<Color>::init(0, 0, Color::WHITE);
     auto sprite = PixelBuffer<Color>::init(4, 4, Color::BLACK);
-    REQUIRE(drawSprite(0, 0, sprite, empty) == false);
+    REQUIRE_FALSE(drawSprite(0, 0, sprite, empty));
     REQUIRE(indicesWithColor(buf, Color::BLACK).empty());
   }
 
@@ -64,7 +64,7 @@ TEST_CASE("sprite rendering", "[display]") {
     REQUIRE(indicesWithColor(buf, Color::BLACK).size() == 1);
 
     auto sprite = PixelBuffer<Color>::init(2, 2, Color::WHITE);
-    REQUIRE(drawSprite(0, 0, sprite, buf) == false);
+    REQUIRE_FALSE(drawSprite(0, 0, sprite, buf));
     REQUIRE(indicesWithColor(buf, Color::BLACK).size() == 1);
   }
 
