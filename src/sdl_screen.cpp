@@ -1,7 +1,8 @@
 #include "sdl_screen.h"
 
-#include <cassert>
 #include <SDL.h>
+
+#include <cassert>
 
 SDLScreen::SDLScreen(float scale, int width, int height)
     : width_{width}, height_{height} {

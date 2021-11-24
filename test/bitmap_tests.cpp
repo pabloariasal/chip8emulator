@@ -19,15 +19,23 @@ TEST_CASE("Bitmaps work as expected", "[bitmap]") {
   }
 
   SECTION("bitmap out of bounds throws an error") {
-    REQUIRE_THROWS_AS(Bitmap<int>(0, 0, 0, -1, buff), BitmapOutOfBoundsException);
-    REQUIRE_THROWS_AS(Bitmap<int>(0, 0, -1, 0, buff), BitmapOutOfBoundsException);
-    REQUIRE_THROWS_AS(Bitmap<int>(0, -1, 0, 0, buff), BitmapOutOfBoundsException);
-    REQUIRE_THROWS_AS(Bitmap<int>(-1, 0, 0, 0, buff), BitmapOutOfBoundsException);
+    REQUIRE_THROWS_AS(Bitmap<int>(0, 0, 0, -1, buff),
+                      BitmapOutOfBoundsException);
+    REQUIRE_THROWS_AS(Bitmap<int>(0, 0, -1, 0, buff),
+                      BitmapOutOfBoundsException);
+    REQUIRE_THROWS_AS(Bitmap<int>(0, -1, 0, 0, buff),
+                      BitmapOutOfBoundsException);
+    REQUIRE_THROWS_AS(Bitmap<int>(-1, 0, 0, 0, buff),
+                      BitmapOutOfBoundsException);
 
-    REQUIRE_THROWS_AS(Bitmap<int>(0, 0, 10, 2, buff), BitmapOutOfBoundsException);
-    REQUIRE_THROWS_AS(Bitmap<int>(0, 0, 2, 10, buff), BitmapOutOfBoundsException);
-    REQUIRE_THROWS_AS(Bitmap<int>(10, 0, 2, 2, buff), BitmapOutOfBoundsException);
-    REQUIRE_THROWS_AS(Bitmap<int>(0, 10, 2, 2, buff), BitmapOutOfBoundsException);
+    REQUIRE_THROWS_AS(Bitmap<int>(0, 0, 10, 2, buff),
+                      BitmapOutOfBoundsException);
+    REQUIRE_THROWS_AS(Bitmap<int>(0, 0, 2, 10, buff),
+                      BitmapOutOfBoundsException);
+    REQUIRE_THROWS_AS(Bitmap<int>(10, 0, 2, 2, buff),
+                      BitmapOutOfBoundsException);
+    REQUIRE_THROWS_AS(Bitmap<int>(0, 10, 2, 2, buff),
+                      BitmapOutOfBoundsException);
   }
 
   SECTION("bitmap iterator works as expected 1/2") {

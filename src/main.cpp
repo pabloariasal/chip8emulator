@@ -5,8 +5,8 @@
 
 #include "display.h"
 #include "mem.h"
-#include "sdl_screen.h"
 #include "pixel_buffer.h"
+#include "sdl_screen.h"
 
 constexpr auto SCREEN_WIDTH = 64;
 constexpr auto SCREEN_HEIGHT = 32;
@@ -27,7 +27,8 @@ int main(int argc, char *argv[]) {
   auto mem = Memory{};
   mem.loadROM(is);
 
-  auto display = PixelBuffer<Color>::init(SCREEN_WIDTH, SCREEN_HEIGHT, Color::WHITE) ;
+  auto display =
+      PixelBuffer<Color>::init(SCREEN_WIDTH, SCREEN_HEIGHT, Color::WHITE);
   display.data().front() = Color::BLACK;
   display.data()[63] = Color::BLACK;
   display.data()[31 * 64] = Color::BLACK;

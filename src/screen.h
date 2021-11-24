@@ -1,8 +1,7 @@
 #pragma once
 
-#include "span.hpp"
-
 #include "color.h"
+#include "span.hpp"
 
 class Screen {
  public:
