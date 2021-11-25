@@ -15,8 +15,12 @@ class PixelBuffer {
     assert(row_width == 0 || data.size() / row_width == 0);
   }
 
+  PixelBuffer(int width, int height, T c)
+      : row_width_{width}, data_(width * height, c) {}
+
+  // TODO: remove this
   static PixelBuffer<T> init(int width, int height, T c) {
-    return PixelBuffer<T>(width, std::vector<T>(width * height, c));
+    return PixelBuffer<T>(width, height, c);
   }
 
   int width() const { return row_width_; }
