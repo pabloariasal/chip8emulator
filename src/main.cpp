@@ -3,13 +3,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "display.h"
-#include "mem.h"
-#include "pixel_buffer.h"
+#include "state.h"
 #include "sdl_screen.h"
-
-constexpr auto SCREEN_WIDTH = 64;
-constexpr auto SCREEN_HEIGHT = 32;
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
@@ -24,24 +19,20 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
 
-  auto mem = Memory{};
-  mem.loadROM(is);
+  auto state = State{};
+  state.display.data().front() = Color::BLACK;
+  state.display.data()[63] = Color::BLACK;
+  state.display.data()[31 * 64] = Color::BLACK;
+  state.display.data().back() = Color::BLACK;
 
-  auto display =
-      PixelBuffer<Color>::init(SCREEN_WIDTH, SCREEN_HEIGHT, Color::WHITE);
-  display.data().front() = Color::BLACK;
-  display.data()[63] = Color::BLACK;
-  display.data()[31 * 64] = Color::BLACK;
-  display.data().back() = Color::BLACK;
-
-  auto screen = SDLScreen(25, SCREEN_WIDTH, SCREEN_HEIGHT);
+  auto screen = SDLScreen(25, state.display.width(), state.display.height());
 
   SDL_Event event;
 
   while (true) {
     SDL_PollEvent(&event);
     if (event.type == SDL_QUIT) break;
-    screen.render(display.data());
+    screen.render(state.display.data());
   }
 
   return 0;
