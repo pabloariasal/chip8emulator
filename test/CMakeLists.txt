@@ -9,8 +9,12 @@ target_link_libraries(bitmap_tests PRIVATE Catch2::Catch2WithMain chip8_lib)
 add_executable(display_tests display_tests.cpp)
 target_link_libraries(display_tests PRIVATE Catch2::Catch2WithMain chip8_lib)
 
+add_executable(instruction_tests instruction_tests.cpp)
+target_link_libraries(instruction_tests PRIVATE Catch2::Catch2WithMain chip8_lib)
+
 include(CTest)
 include(Catch)
 catch_discover_tests(memory_tests)
 catch_discover_tests(bitmap_tests)
 catch_discover_tests(display_tests)
+catch_discover_tests(instruction_tests)
