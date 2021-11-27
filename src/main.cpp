@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 
+#include "process_instruction.h"
 #include "sdl_screen.h"
 #include "state.h"
 
@@ -32,6 +33,8 @@ int main(int argc, char *argv[]) {
   while (true) {
     SDL_PollEvent(&event);
     if (event.type == SDL_QUIT) break;
+
+    processInstruction(nextOpcode(state), state);
     screen.render(state.display.data());
   }
 

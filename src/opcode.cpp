@@ -17,3 +17,10 @@ uint8_t fourth(Opcode opcode) { return opcode & 0x000F; }
 uint16_t lastThree(Opcode opcode) { return opcode & 0x0FFF; }
 
 uint8_t lastTwo(Opcode opcode) { return opcode & 0x00FF; }
+
+Opcode buildOpcode(Memory::Word w1, Memory::Word w2) {
+  Opcode opcode{};
+  opcode |= w1;
+  opcode <<= 4 * 2;
+  return opcode |= w2;
+}

@@ -31,4 +31,5 @@ TEST_CASE("Opcode Tests") {
     REQUIRE(lastTwo(0x1234) == 0x34);
     REQUIRE(lastTwo(0x0005) == 5);
   }
+  SECTION("build") { REQUIRE(buildOpcode(0x65, 0xF4) == 0x65F4); }
 }

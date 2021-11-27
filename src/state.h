@@ -13,7 +13,7 @@ struct State {
   Memory mem;
   Display display;
   RegsT regs;
-  RegT pc;
+  RegT pc{Memory::ROM_BEGIN};
   RegT i;
   StackT stack;
   TimerT delayTimer;

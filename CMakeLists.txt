@@ -46,6 +46,7 @@ target_sources(chip8_lib
     src/sdl_screen.cpp
     src/opcode.cpp
     src/inst.cpp
+    src/process_instruction.cpp
     )
 target_include_directories(chip8_lib PUBLIC src 3rdparty)
 target_link_libraries(chip8_lib PUBLIC SDL2::SDL2)
