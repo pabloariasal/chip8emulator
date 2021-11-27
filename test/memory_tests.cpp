@@ -7,14 +7,13 @@ TEST_CASE("Memory Tests") {
   Memory mem;
 
   SECTION("ROM loading") {
+    std::istringstream stream("abc");
 
-  std::istringstream stream("abc");
+    mem.loadROM(stream);
 
-  mem.loadROM(stream);
-
-  REQUIRE(mem.read(Memory::ROM_BEGIN + 0) == 'a');
-  REQUIRE(mem.read(Memory::ROM_BEGIN + 1) == 'b');
-  REQUIRE(mem.read(Memory::ROM_BEGIN + 2) == 'c');
+    REQUIRE(mem.read(Memory::ROM_BEGIN + 0) == 'a');
+    REQUIRE(mem.read(Memory::ROM_BEGIN + 1) == 'b');
+    REQUIRE(mem.read(Memory::ROM_BEGIN + 2) == 'c');
   }
   SECTION("Read/Write") {
     mem.write(0, 1);

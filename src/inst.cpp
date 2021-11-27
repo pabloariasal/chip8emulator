@@ -104,9 +104,7 @@ void Inst_8XYE(Opcode opcode, RegsT& regs) {
 }
 
 // set index register I to NNN
-void Inst_ANNN(Opcode opcode, RegT& i) {
-  i = lastThree(opcode);
-}
+void Inst_ANNN(Opcode opcode, RegT& i) { i = lastThree(opcode); }
 
 // jump with offset (table lookup)
 void Inst_BNNN(Opcode opcode, const RegsT& regs, RegT& pc) {

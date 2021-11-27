@@ -1,9 +1,9 @@
 #pragma once
 
-#include "mem.h"
 #include "disp.h"
-#include "timer.h"
+#include "mem.h"
 #include "stack.h"
+#include "timer.h"
 
 using RegT = uint16_t;
 constexpr auto NUM_REGS = 16;

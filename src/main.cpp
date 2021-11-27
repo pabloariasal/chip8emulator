@@ -3,8 +3,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "state.h"
 #include "sdl_screen.h"
+#include "state.h"
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
