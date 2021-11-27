@@ -29,6 +29,8 @@ class PixelBuffer {
   tcb::span<const T> data() const { return data_; }
   tcb::span<T> data() { return data_; }
 
+  void setAll(const T& e) { std::fill(data_.begin(), data_.end(), e); }
+
   typename std::vector<T>::iterator begin() { return data_.begin(); }
   typename std::vector<T>::iterator end() { return data_.end(); }
   typename std::vector<T>::const_iterator cbegin() const {

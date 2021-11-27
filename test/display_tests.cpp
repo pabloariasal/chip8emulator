@@ -125,3 +125,26 @@ TEST_CASE("sprite rendering", "[display]") {
     REQUIRE(indicesWithColor(buf, Color::BLACK).size() == 5);
   }
 }
+
+TEST_CASE("Color vector construction") {
+  SECTION("empty color vector") { REQUIRE(toColorVec({}).empty()); }
+  SECTION("construct color vector") {
+    const auto expected = std::vector<Color>{
+        Color::BLACK, Color::BLACK, Color::BLACK, Color::BLACK,
+        Color::WHITE, Color::WHITE, Color::WHITE, Color::WHITE,
+        Color::BLACK, Color::WHITE, Color::BLACK, Color::WHITE,
+        Color::BLACK, Color::WHITE, Color::BLACK, Color::WHITE};
+    REQUIRE(toColorVec({0b11110000, 0b10101010}) == expected);
+  }
+}
+
+TEST_CASE("Set all pixels") {
+  auto buf = PixelBuffer<Color>::init(3, 3, Color::WHITE);
+  SECTION("set all pixels to black") {
+    REQUIRE(std::all_of(buf.cbegin(), buf.cend(),
+                        [](const auto& e) { return e == Color::WHITE; }));
+    buf.setAll(Color::BLACK);
+    REQUIRE(std::all_of(buf.cbegin(), buf.cend(),
+                        [](const auto& e) { return e == Color::BLACK; }));
+  }
+}

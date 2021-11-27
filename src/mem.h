@@ -13,9 +13,7 @@ class Memory {
   constexpr static auto MEM_SIZE = 4096;
   constexpr static Index ROM_BEGIN = 0x200;
 
-  bool loadROM(std::istream &istream);
-
-  Word at(Index i) const { return mem_[i]; }
+  bool loadROM(std::istream& istream);
 
   void write(Index i, Word w) { mem_[i] = w; };
   Word read(Index i) const { return mem_[i]; };
@@ -25,3 +23,5 @@ class Memory {
  private:
   std::vector<Word> mem_;
 };
+
+std::vector<Memory::Word> readN(const Memory& mem, Memory::Index w, int n);

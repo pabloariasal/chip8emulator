@@ -3,13 +3,32 @@
 
 #include "mem.h"
 
-TEST_CASE("ROM is loaded into memory", "[memory]") {
+TEST_CASE("Memory Tests") {
+  Memory mem;
+
+  SECTION("ROM loading") {
+
   std::istringstream stream("abc");
 
-  Memory mem;
   mem.loadROM(stream);
 
-  REQUIRE(mem.at(Memory::ROM_BEGIN + 0) == 'a');
-  REQUIRE(mem.at(Memory::ROM_BEGIN + 1) == 'b');
-  REQUIRE(mem.at(Memory::ROM_BEGIN + 2) == 'c');
+  REQUIRE(mem.read(Memory::ROM_BEGIN + 0) == 'a');
+  REQUIRE(mem.read(Memory::ROM_BEGIN + 1) == 'b');
+  REQUIRE(mem.read(Memory::ROM_BEGIN + 2) == 'c');
+  }
+  SECTION("Read/Write") {
+    mem.write(0, 1);
+    mem.write(1, 2);
+    mem.write(2, 3);
+    REQUIRE(mem.read(0) == 1);
+    REQUIRE(mem.read(1) == 2);
+    REQUIRE(mem.read(2) == 3);
+  }
+
+  SECTION("readN") {
+    mem.write(10, 1);
+    mem.write(11, 2);
+    mem.write(12, 3);
+    REQUIRE(readN(mem, 10, 4) == std::vector<Memory::Word>{1, 2, 3, 0});
+  }
 }

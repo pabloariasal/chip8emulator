@@ -54,3 +54,17 @@ bool drawSprite(int row, int col, const PixelBuffer<Color>& sprite,
 
   return flipped;
 }
+
+std::vector<Color> toColorVec(std::vector<uint8_t> sprite_pixels) {
+  std::vector<Color> res;
+  res.reserve(8 * sprite_pixels.size());
+
+  for (auto r : sprite_pixels) {
+    for (int i = 0; i < 8; ++i) {
+      res.push_back((r & 0x01) == 0 ? Color::BLACK : Color::WHITE);
+      r >>= 1;
+    }
+  }
+
+  return res;
+}

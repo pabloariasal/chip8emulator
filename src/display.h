@@ -1,3 +1,4 @@
+// TODO: rename this header
 #pragma once
 
 #include <vector>
@@ -20,3 +21,5 @@
  */
 bool drawSprite(int row, int col, const PixelBuffer<Color>& sprite,
                 PixelBuffer<Color>& screen);
+
+std::vector<Color> toColorVec(std::vector<uint8_t> sprite_pixels);
