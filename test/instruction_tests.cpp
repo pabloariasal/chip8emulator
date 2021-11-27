@@ -74,7 +74,7 @@ TEST_CASE("FX55/FX65 Memory Read Write") {
   }
 }
 
-TEST_CASE("6XNN - Registers") {
+TEST_CASE("6XNN/7XNN/ANNN - Registers") {
   auto regs = RegsT{};
   SECTION("Set register to value") {
     Inst_6XNN(0x6F03, regs);
@@ -84,5 +84,21 @@ TEST_CASE("6XNN - Registers") {
     REQUIRE(non_zero_regs.size() == 2);
     REQUIRE(non_zero_regs.at(0xF) == 3);
     REQUIRE(non_zero_regs.at(0x0) == 0x13);
+  }
+  SECTION("Add value to register") {
+    Inst_6XNN(0x6C03, regs);
+    Inst_7XNN(0x6C03, regs);
+
+    auto non_zero_regs = entriesUnequalZero(regs);
+    REQUIRE(non_zero_regs.size() == 1);
+    REQUIRE(non_zero_regs.at(0xC) == 6);
+  }
+  SECTION("Set Index Register") {
+    auto i = RegT{};
+    Inst_ANNN(0x6003, i);
+    REQUIRE(i == 3);
+
+    Inst_ANNN(0x6FFF, i);
+    REQUIRE(i == 0xFFF);
   }
 }

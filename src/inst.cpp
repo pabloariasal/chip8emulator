@@ -1,6 +1,7 @@
 #include "inst.h"
 
 #include <inttypes.h>
+
 #include <iostream>
 
 #include "display.h"
@@ -58,8 +59,9 @@ void Inst_6XNN(Opcode opcode, RegsT& regs) {
 }
 
 void Inst_7XNN(Opcode opcode, RegsT& regs) {
-  (void)regs;
-  (void)opcode;
+  const auto r = second(opcode);
+  const auto v = lastTwo(opcode);
+  regs[r] += v;
 }
 
 // Math/arithmetic
@@ -103,8 +105,7 @@ void Inst_8XYE(Opcode opcode, RegsT& regs) {
 
 // set index register I to NNN
 void Inst_ANNN(Opcode opcode, RegT& i) {
-  (void)i;
-  (void)opcode;
+  i = lastThree(opcode);
 }
 
 // jump with offset (table lookup)
