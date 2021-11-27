@@ -1,5 +1,6 @@
 #include <SDL.h>
 
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 
@@ -7,25 +8,30 @@
 #include "sdl_screen.h"
 #include "state.h"
 
-int main(int argc, char *argv[]) {
+namespace {
+
+State startGame(const std::filesystem::path& rom) {
+  State state{};
+
+  std::ifstream is(rom, std::ifstream::binary);
+  if (!is) {
+    std::cout << "could not open file " << rom << '\n';
+    exit(1);
+  }
+  state.mem.loadROM(is);
+  is.close();
+  return state;
+}
+}  // namespace
+
+int main(int argc, char* argv[]) {
   if (argc != 2) {
     std::cout << "usage "
               << "program <rom>\n";
     exit(1);
   }
 
-  std::ifstream is(argv[1], std::ifstream::binary);
-  if (!is) {
-    std::cout << "could not open file " << argv[1] << '\n';
-    exit(1);
-  }
-
-  auto state = State{};
-  state.display.data().front() = Color::BLACK;
-  state.display.data()[63] = Color::BLACK;
-  state.display.data()[31 * 64] = Color::BLACK;
-  state.display.data().back() = Color::BLACK;
-
+  auto state = startGame(argv[1]);
   auto screen = SDLScreen(25, state.display.width(), state.display.height());
 
   SDL_Event event;
