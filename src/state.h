@@ -1,7 +1,5 @@
 #pragma once
 
-#include <stack>
-
 #include "mem.h"
 #include "disp.h"
 #include "regs.h"
@@ -11,10 +9,10 @@
 struct State {
   Memory mem;
   Display display;
-  Memory::Index pc;
-  Memory::Index i;
   Regs regs;
-  Stack<Memory::Index> stack;
+  RegT pc;
+  RegT i;
+  StackT stack;
   TimerT delayTimer;
   TimerT soundTimer;
 };

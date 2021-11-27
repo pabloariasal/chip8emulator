@@ -2,8 +2,6 @@
 
 #include <stack>
 
-template<typename T>
-using Stack = std::stack<T>;
+#include "mem.h"
 
-
-
+using StackT = std::stack<Memory::Index>;
