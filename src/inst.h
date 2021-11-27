@@ -1,6 +1,5 @@
 #pragma once
 
-#include "display.h"
 #include "opcode.h"
 #include "state.h"
 
@@ -52,7 +51,8 @@ void Inst_BNNN(Opcode opcode, const RegsT& regs, RegT& pc);
 void Inst_CXNN(Opcode opcode, RegsT& regs);
 
 // draw sprite
-void Inst_DXYN(Opcode opcode, const Memory& mem, const RegT& i, Display& dis);
+void Inst_DXYN(Opcode opcode, RegsT& regs, const Memory& mem, const RegT& i,
+               Display& dis);
 
 // skip if key is pressed
 void Inst_EX9E(Opcode opcode, const RegsT& regs, RegT& pc);

@@ -18,16 +18,13 @@ class PixelBuffer {
   PixelBuffer(int width, int height, T c)
       : row_width_{width}, data_(width * height, c) {}
 
-  // TODO: remove this
-  static PixelBuffer<T> init(int width, int height, T c) {
-    return PixelBuffer<T>(width, height, c);
-  }
-
   int width() const { return row_width_; }
   int height() const { return data_.empty() ? 0 : data_.size() / row_width_; }
 
+  const T& get(int row, int col) const { return data_.at(index(row, col)); }
+  T& get(int row, int col) { return data_.at(index(row, col)); }
+
   tcb::span<const T> data() const { return data_; }
-  tcb::span<T> data() { return data_; }
 
   void setAll(const T& e) { std::fill(data_.begin(), data_.end(), e); }
 
@@ -39,6 +36,8 @@ class PixelBuffer {
   typename std::vector<T>::const_iterator cend() const { return data_.cend(); }
 
  private:
+  std::size_t index(int row, int col) const { return row * row_width_ + col; }
+
   int row_width_;
   std::vector<T> data_;
 };

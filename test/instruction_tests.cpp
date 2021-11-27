@@ -1,5 +1,7 @@
+// TODO: split this class
 #include <catch2/catch.hpp>
 #include <map>
+#include <unordered_set>
 
 #include "process_instruction.h"
 #include "state.h"
@@ -115,5 +117,96 @@ TEST_CASE("6XNN/7XNN/ANNN - Registers") {
 
     processInstruction(0xAFFF, s);
     REQUIRE(s.i == 0xFFF);
+  }
+}
+
+namespace {
+
+struct Pair {
+  int row;
+  int col;
+};
+
+std::unordered_set<size_t> indicesFromPairs(std::initializer_list<Pair> pairs,
+                                            const PixelBuffer<Color>& buf) {
+  std::unordered_set<size_t> res;
+  res.reserve(pairs.size());
+  std::transform(pairs.begin(), pairs.end(), std::inserter(res, res.end()),
+                 [&buf](const auto& p) { return p.row * buf.width() + p.col; });
+  return res;
+}
+
+std::unordered_set<size_t> indicesWithColor(const PixelBuffer<Color>& buf,
+                                            Color color) {
+  std::unordered_set<size_t> res;
+  res.reserve(buf.data().size());
+
+  for (size_t i = 0; i < buf.data().size(); ++i) {
+    if (buf.data()[i] == color) {
+      res.insert(i);
+    }
+  }
+  return res;
+}
+}  // namespace
+
+TEST_CASE("DXYN") {
+  auto s = State{};
+  s.i = 5;
+
+  s.mem.write(s.i, 0x80u);
+  s.mem.write(s.i + 1, 0x01u);
+
+  s.regs[1] = 1;  // horizontal
+  s.regs[2] = 2;  // vertical
+
+  SECTION("draw zero rows") {
+    processInstruction(0xD120, s);
+    REQUIRE(indicesWithColor(s.display, Color::BLACK).empty());
+    REQUIRE(s.regs[0xF] == 0);
+  }
+
+  SECTION("draw one row") {
+    processInstruction(0xD121, s);
+    const auto expected = indicesFromPairs({{2, 1}}, s.display);
+    const auto actual = indicesWithColor(s.display, Color::BLACK);
+    REQUIRE(expected == actual);
+    REQUIRE(s.regs[0xF] == 0);
+  }
+
+  SECTION("draw two rows") {
+    processInstruction(0xD122, s);
+    const auto expected = indicesFromPairs({{2, 1}, {3, 8}}, s.display);
+    const auto actual = indicesWithColor(s.display, Color::BLACK);
+    REQUIRE(expected == actual);
+    REQUIRE(s.regs[0xF] == 0);
+  }
+
+  SECTION("drawing the same sprite two times clears the screen") {
+    processInstruction(0xD121, s);
+    REQUIRE(s.regs[0xF] == 0);
+    processInstruction(0xD121, s);
+    REQUIRE(s.regs[0xF] == 1);
+    REQUIRE(indicesWithColor(s.display, Color::BLACK).empty());
+  }
+
+  SECTION("coordinate oveflow") {
+    s.regs[1] = Display::SCREEN_WIDTH + 1;   // corresponds to second column
+    s.regs[2] = Display::SCREEN_HEIGHT + 2;  // corresponds to third row
+    processInstruction(0xD121, s);
+    const auto expected = indicesFromPairs({{2, 1}}, s.display);
+    const auto actual = indicesWithColor(s.display, Color::BLACK);
+    REQUIRE(expected == actual);
+    REQUIRE(s.regs[0xF] == 0);
+  }
+  SECTION("coordinate oveflow") {
+    s.regs[1] = Display::SCREEN_WIDTH - 1;   // corresponds to second column
+    s.regs[2] = Display::SCREEN_HEIGHT - 1;  // corresponds to third row
+    processInstruction(0xD122, s);
+    const auto expected = indicesFromPairs(
+        {{Display::SCREEN_HEIGHT - 1, Display::SCREEN_WIDTH - 1}}, s.display);
+    const auto actual = indicesWithColor(s.display, Color::BLACK);
+    REQUIRE(expected == actual);
+    REQUIRE(s.regs[0xF] == 0);
   }
 }

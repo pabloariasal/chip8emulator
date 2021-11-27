@@ -29,7 +29,7 @@ void processInstruction(Opcode opcode, State& state) {
       Inst_ANNN(opcode, state.i);
       break;
     case 0xD:
-      Inst_DXYN(opcode, state.mem, state.i, state.display);
+      Inst_DXYN(opcode, state.regs, state.mem, state.i, state.display);
       break;
     case 0xF:
       if (lastTwo(opcode) == 0x55) {

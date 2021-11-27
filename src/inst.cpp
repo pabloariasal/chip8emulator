@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-#include "display.h"
+#include "draw_sprite.h"
 #include "opcode.h"
 #include "state.h"
 
@@ -120,11 +120,15 @@ void Inst_CXNN(Opcode opcode, RegsT& regs) {
 }
 
 // draw sprite
-void Inst_DXYN(Opcode opcode, const Memory& mem, const RegT& i, Display& dis) {
+void Inst_DXYN(Opcode opcode, RegsT& regs, const Memory& mem, const RegT& i,
+               Display& dis) {
   const auto x = second(opcode);
   const auto y = third(opcode);
   const auto n = fourth(opcode);
-  drawSprite(x, y, PixelBuffer<Color>(8, toColorVec(readN(mem, i, n))), dis);
+  regs[0xF] = 0;
+  if (drawSprite(regs.at(y), regs.at(x), readN(mem, i, n), dis)) {
+    regs[0xF] = 1;
+  }
 }
 
 // skip if key is pressed
