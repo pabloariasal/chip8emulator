@@ -41,10 +41,10 @@ TEST_CASE("Next Opcode Tests") {
 
     REQUIRE(s.pc == Memory::ROM_BEGIN);
     REQUIRE(nextOpcode(s) == 0x1234);
-    REQUIRE(s.pc == Memory::ROM_BEGIN + 2);
+    REQUIRE(s.pc == Memory::ROM_BEGIN + OPCODE_SIZE_WORDS * 1);
 
     REQUIRE(nextOpcode(s) == 0x5678);
-    REQUIRE(s.pc == Memory::ROM_BEGIN + 4);
+    REQUIRE(s.pc == Memory::ROM_BEGIN + OPCODE_SIZE_WORDS * 2);
   }
 }
 
@@ -208,5 +208,51 @@ TEST_CASE("DXYN") {
     const auto actual = indicesWithColor(s.display, Color::BLACK);
     REQUIRE(expected == actual);
     REQUIRE(s.regs[0xF] == 0);
+  }
+}
+
+TEST_CASE("Skip Control Flow - 3XNN/4XNN/5XY0/9XY0") {
+  auto s = State{};
+  SECTION("Jump if value in vx is equal") {
+    auto pc = s.pc;
+    s.regs[0x8] = 0x8;
+    processInstruction(0x3813, s);
+    REQUIRE(s.pc == pc);
+
+    s.regs[0xA] = 0xAA;
+    processInstruction(0x3AAA, s);
+    REQUIRE(s.pc == pc + OPCODE_SIZE_WORDS);
+  }
+  SECTION("Jump if value in vx is not equal") {
+    auto pc = s.pc;
+    s.regs[0xA] = 0xAA;
+    processInstruction(0x4AAA, s);
+    REQUIRE(s.pc == pc);
+
+    s.regs[0x8] = 8;
+    processInstruction(0x4813, s);
+    REQUIRE(s.pc == pc + OPCODE_SIZE_WORDS);
+  }
+  SECTION("Jump if values in regs equals") {
+    auto pc = s.pc;
+    s.regs[0xA] = 0xAA;
+    s.regs[0xB] = 0x5;
+    processInstruction(0x5AB0, s);
+    REQUIRE(s.pc == pc);
+
+    s.regs[0xB] = 0xAA;
+    processInstruction(0x5AB3, s);
+    REQUIRE(s.pc == pc + OPCODE_SIZE_WORDS);
+  }
+  SECTION("Jump if values in regs not equals") {
+    auto pc = s.pc;
+    s.regs[0xA] = 0xAA;
+    s.regs[0xB] = 0xAA;
+    processInstruction(0x9AB0, s);
+    REQUIRE(s.pc == pc);
+
+    s.regs[0xB] = 0x5;
+    processInstruction(0x9AB0, s);
+    REQUIRE(s.pc == pc + OPCODE_SIZE_WORDS);
   }
 }

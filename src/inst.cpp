@@ -29,26 +29,38 @@ void Inst_00EE(Opcode opcode, StackT& stack, RegT& pc) {
 }
 
 // ---------------------------- Skipping -----------
-void Inst_9XY0(Opcode opcode, RegT& pc) {
-  (void)pc;
-  (void)opcode;
+void Inst_9XY0(Opcode opcode, const RegsT& regs,RegT& pc) {
+  auto first = second(opcode);
+  auto second = third(opcode);
+
+  if (regs.at(first) != regs.at(second)) {
+    pc += OPCODE_SIZE_WORDS;
+  }
 }
 
-void Inst_5XY0(Opcode opcode, RegT& pc) {
-  (void)pc;
-  (void)opcode;
+void Inst_5XY0(Opcode opcode, const RegsT& regs, RegT& pc) {
+  auto first = second(opcode);
+  auto second = third(opcode);
+
+  if (regs.at(first) == regs.at(second)) {
+    pc += OPCODE_SIZE_WORDS;
+  }
 }
 
 void Inst_3XNN(Opcode opcode, const RegsT& regs, RegT& pc) {
-  (void)regs;
-  (void)pc;
-  (void)opcode;
+  auto r = second(opcode);
+  auto v = lastTwo(opcode);
+  if (v == regs.at(r)) {
+    pc += OPCODE_SIZE_WORDS;
+  }
 }
 
 void Inst_4XNN(Opcode opcode, const RegsT& regs, RegT& pc) {
-  (void)regs;
-  (void)pc;
-  (void)opcode;
+  auto r = second(opcode);
+  auto v = lastTwo(opcode);
+  if (v != regs.at(r)) {
+    pc += OPCODE_SIZE_WORDS;
+  }
 }
 
 // ---------------------------- Register Generic -----------

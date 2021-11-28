@@ -5,6 +5,7 @@
 #include "mem.h"
 
 using Opcode = uint16_t;
+constexpr auto OPCODE_SIZE_WORDS = 2;
 
 uint8_t first(Opcode opcode);
 uint8_t second(Opcode opcode);

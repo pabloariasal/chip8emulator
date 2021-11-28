@@ -16,9 +16,9 @@ void Inst_2NNN(Opcode opcode, StackT& stack, RegT& pc);
 void Inst_00EE(Opcode opcode, StackT& stack, RegT& pc);
 
 // ---------------------------- Skipping -----------
-void Inst_9XY0(Opcode opcode, RegT& pc);
+void Inst_9XY0(Opcode opcode, const RegsT& regs, RegT& pc);
 
-void Inst_5XY0(Opcode opcode, RegT& pc);
+void Inst_5XY0(Opcode opcode, const RegsT& regs, RegT& pc);
 
 void Inst_3XNN(Opcode opcode, const RegsT& regs, RegT& pc);
 
