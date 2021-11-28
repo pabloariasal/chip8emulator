@@ -278,3 +278,76 @@ TEST_CASE("00EE/2NNN Subroutines") {
     REQUIRE(s.pc == 0x111);
   }
 }
+
+TEST_CASE("Math/Arithmetic Intructions") {
+  auto s = State{};
+  SECTION("8YX0 - Set the value of register") {
+    s.regs[0x6] = 0x7;
+    processInstruction(0x8560, s);
+    auto non_zero_regs = entriesUnequalZero(s.regs);
+    REQUIRE(non_zero_regs.size() == 2);
+    REQUIRE(non_zero_regs.at(5) == 7);
+  }
+  SECTION("8XY1 - Binary OR") {
+    s.regs[0xA] = 0x1;
+    s.regs[0xB] = 0x2;
+    processInstruction(0x8BA1, s);
+    auto non_zero_regs = entriesUnequalZero(s.regs);
+    REQUIRE(non_zero_regs.size() == 2);
+    REQUIRE(non_zero_regs.at(0xB) == 0x3);
+    REQUIRE(non_zero_regs.at(0xA) == 0x1);
+  }
+  SECTION("8XY1 - Binary OR") {
+    s.regs[0xA] = 0x1;
+    s.regs[0xB] = 0x3;
+    processInstruction(0x8BA2, s);
+    auto non_zero_regs = entriesUnequalZero(s.regs);
+    REQUIRE(non_zero_regs.size() == 2);
+    REQUIRE(non_zero_regs.at(0xB) == 0x1);
+    REQUIRE(non_zero_regs.at(0xA) == 0x1);
+  }
+  SECTION("8XY1 - Binary XOR") {
+    s.regs[0xA] = 0x1;
+    s.regs[0xB] = 0x3;
+    processInstruction(0x8BA3, s);
+    auto non_zero_regs = entriesUnequalZero(s.regs);
+    REQUIRE(non_zero_regs.size() == 2);
+    REQUIRE(non_zero_regs.at(0xB) == 0x2);
+    REQUIRE(non_zero_regs.at(0xA) == 0x1);
+  }
+  SECTION("8YX4 - Addition") {
+    s.regs[0xA] = 0x1;
+    s.regs[0xB] = 0x3;
+    processInstruction(0x8BA4, s);
+    auto non_zero_regs = entriesUnequalZero(s.regs);
+    REQUIRE(non_zero_regs.size() == 2);
+    REQUIRE(non_zero_regs.at(0xB) == 0x4);
+    REQUIRE(non_zero_regs.at(0xA) == 0x1);
+
+    s.regs[0xC] = 0xFF;
+
+    processInstruction(0x8CB4, s);
+    non_zero_regs = entriesUnequalZero(s.regs);
+    REQUIRE(non_zero_regs.size() == 4);
+    REQUIRE(non_zero_regs.at(0xB) == 0x4);
+    REQUIRE(non_zero_regs.at(0xA) == 0x1);
+    REQUIRE(non_zero_regs.at(0xC) == 0x3);
+    REQUIRE(non_zero_regs.at(0xF) == 0x1);
+  }
+  SECTION("8YX5 - Substraction") {
+    s.regs[0xA] = 0x3;
+    s.regs[0xB] = 0x1;
+    processInstruction(0x8AB5, s);
+    auto non_zero_regs = entriesUnequalZero(s.regs);
+    REQUIRE(non_zero_regs.size() == 3);
+    REQUIRE(non_zero_regs.at(0xB) == 0x1);
+    REQUIRE(non_zero_regs.at(0xA) == 0x2);
+    REQUIRE(non_zero_regs.at(0xF) == 0x1);
+
+    processInstruction(0x8BA5, s);
+    non_zero_regs = entriesUnequalZero(s.regs);
+    REQUIRE(non_zero_regs.size() == 2);
+    REQUIRE(non_zero_regs.at(0xB) == 0xFF);  // underflow
+    REQUIRE(non_zero_regs.at(0xA) == 0x2);
+  }
+}

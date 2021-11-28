@@ -42,6 +42,39 @@ void processInstruction(Opcode opcode, State& state) {
     case 0x7:
       Inst_7XNN(opcode, state.regs);
       break;
+    case 0x8:
+      switch (fourth(opcode)) {
+        case 0x0:
+          Inst_8XY0(opcode, state.regs);
+          break;
+        case 0x1:
+          Inst_8XY1(opcode, state.regs);
+          break;
+        case 0x2:
+          Inst_8XY2(opcode, state.regs);
+          break;
+        case 0x3:
+          Inst_8XY3(opcode, state.regs);
+          break;
+        case 0x4:
+          Inst_8XY4(opcode, state.regs);
+          break;
+        case 0x5:
+          Inst_8XY5(opcode, state.regs);
+          break;
+        case 0x7:
+          Inst_8XY7(opcode, state.regs);
+          break;
+        case 0x6:
+          Inst_8XY6(opcode, state.regs);
+          break;
+        case 0xE:
+          Inst_8XYE(opcode, state.regs);
+          break;
+        default:
+          assert(false);
+      }
+      break;
     case 0x9:
       Inst_9XY0(opcode, state.regs, state.pc);
       break;
