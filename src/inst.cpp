@@ -16,20 +16,18 @@ void Inst_1NNN(Opcode opcode, RegT& pc) { pc = lastThree(opcode); }
 
 // call subroutine at provided access
 void Inst_2NNN(Opcode opcode, StackT& stack, RegT& pc) {
-  (void)opcode;
-  (void)stack;
-  (void)pc;
+  stack.push(pc);
+  pc = lastThree(opcode);
 }
 
 // return from subroutine
-void Inst_00EE(Opcode opcode, StackT& stack, RegT& pc) {
-  (void)opcode;
-  (void)stack;
-  (void)pc;
+void Inst_00EE(Opcode, StackT& stack, RegT& pc) {
+  pc = stack.top();
+  stack.pop();
 }
 
 // ---------------------------- Skipping -----------
-void Inst_9XY0(Opcode opcode, const RegsT& regs,RegT& pc) {
+void Inst_9XY0(Opcode opcode, const RegsT& regs, RegT& pc) {
   auto first = second(opcode);
   auto second = third(opcode);
 

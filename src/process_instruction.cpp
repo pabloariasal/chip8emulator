@@ -15,10 +15,17 @@ Opcode nextOpcode(State& state) {
 void processInstruction(Opcode opcode, State& state) {
   switch (first(opcode)) {
     case 0x0:
-      Inst_00E0(state.display);
+      if (lastThree(opcode) == 0x0E0) {
+        Inst_00E0(state.display);
+      } else {
+        Inst_00EE(opcode, state.stack, state.pc);
+      }
       break;
     case 0x1:
       Inst_1NNN(opcode, state.pc);
+      break;
+    case 0x2:
+      Inst_2NNN(opcode, state.stack, state.pc);
       break;
     case 0x3:
       Inst_3XNN(opcode, state.regs, state.pc);

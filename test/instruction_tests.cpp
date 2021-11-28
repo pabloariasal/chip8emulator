@@ -256,3 +256,25 @@ TEST_CASE("Skip Control Flow - 3XNN/4XNN/5XY0/9XY0") {
     REQUIRE(s.pc == pc + OPCODE_SIZE_WORDS);
   }
 }
+
+TEST_CASE("00EE/2NNN Subroutines") {
+  auto s = State{};
+  s.mem.write(0x444, 0x12);
+  s.pc = 0x111;
+  SECTION("Call subroutine at memory location") {
+    processInstruction(0x2444, s);
+    REQUIRE(s.pc == 0x444);
+    REQUIRE(s.stack.size() == 1);
+    REQUIRE(s.stack.top() == 0x111);
+  }
+  SECTION("Returning from a subroutine") {
+    // first call a subroutine
+    processInstruction(0x2444, s);
+    REQUIRE(s.pc == 0x444);
+
+    // now return from it -> should restore PC
+    processInstruction(0x00EE, s);
+    REQUIRE(s.stack.empty());
+    REQUIRE(s.pc == 0x111);
+  }
+}
