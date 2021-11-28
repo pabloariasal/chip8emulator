@@ -21,13 +21,14 @@ bool invertColor(Color& color) {
 
 bool drawSprite(int row, int col, const std::vector<uint8_t>& sprite,
                 PixelBuffer<Color>& display) {
-  auto flipped = false;
-
   // wrap coordinates
   row = row % display.height();
   col = col % display.width();
 
-  for (int sr = 0, x = row; sr < (int)sprite.size() && x < display.height();
+  auto num_sprite_rows = static_cast<int>(sprite.size());
+  auto flipped = false;
+
+  for (int sr = 0, x = row; sr < num_sprite_rows && x < display.height();
        sr++, ++x) {
     for (int sc = 0, y = col; sc < 8 && y < display.width(); sc++, ++y) {
       if (isPixelSet(sc, sprite.at(sr))) {
