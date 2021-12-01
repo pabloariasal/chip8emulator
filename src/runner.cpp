@@ -34,13 +34,53 @@ bool Runner::handleEvents(Game& game) {
         return false;
       case SDL_KEYDOWN:
         switch (event.key.keysym.sym) {
-          case SDLK_LEFT:
+          case SDLK_1:
+            game.keyPressed(0x1);
             break;
-          case SDLK_RIGHT:
+          case SDLK_2:
+            game.keyPressed(0x2);
             break;
-          case SDLK_UP:
+          case SDLK_3:
+            game.keyPressed(0x3);
             break;
-          case SDLK_DOWN:
+          case SDLK_4:
+            game.keyPressed(0xC);
+            break;
+          case SDLK_q:
+            game.keyPressed(0x4);
+            break;
+          case SDLK_w:
+            game.keyPressed(0x5);
+            break;
+          case SDLK_e:
+            game.keyPressed(0x6);
+            break;
+          case SDLK_r:
+            game.keyPressed(0xD);
+            break;
+          case SDLK_a:
+            game.keyPressed(0x7);
+            break;
+          case SDLK_s:
+            game.keyPressed(0x8);
+            break;
+          case SDLK_d:
+            game.keyPressed(0x9);
+            break;
+          case SDLK_f:
+            game.keyPressed(0xE);
+            break;
+          case SDLK_z:
+            game.keyPressed(0xA);
+            break;
+          case SDLK_x:
+            game.keyPressed(0x0);
+            break;
+          case SDLK_c:
+            game.keyPressed(0xB);
+            break;
+          case SDLK_v:
+            game.keyPressed(0xF);
             break;
         }
         break;

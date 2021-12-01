@@ -20,7 +20,7 @@ class Game {
   // Executes the next instruction
   // Returns if the display has been invalidated
   bool next();
-  void keyPressed();
+  void keyPressed(KeyT key);
 
  private:
   std::unique_ptr<State> state_;

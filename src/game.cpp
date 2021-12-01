@@ -28,4 +28,7 @@ bool Game::next() {
   return true;
 }
 
-void Game::keyPressed() {}
+void Game::keyPressed(KeyT key) {
+  state_->key = key;
+  std::cout << "key pressed: " << std::to_string(key) << std::endl;
+}
