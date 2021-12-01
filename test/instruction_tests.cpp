@@ -351,3 +351,51 @@ TEST_CASE("Math/Arithmetic Intructions") {
     REQUIRE(non_zero_regs.at(0xA) == 0x2);
   }
 }
+
+TEST_CASE("FX0A - Key Input") {
+  auto s = State{};
+  SECTION("Instruction blocks until a key is pressed") {
+    auto old_pc = s.pc;
+    processInstruction(0xF40A, s);
+    processInstruction(0xF40A, s);
+    processInstruction(0xF40A, s);
+    auto non_zero_regs = entriesUnequalZero(s.regs);
+    REQUIRE(non_zero_regs.empty());
+    REQUIRE(old_pc - 3 * OPCODE_SIZE_WORDS == s.pc);
+  }
+  SECTION("Pressed key is stored in register") {
+    auto old_pc = s.pc;
+    s.key = 0x6;
+    processInstruction(0xF40A, s);
+    s.key = 0x9;
+    processInstruction(0xF70A, s);
+
+    auto non_zero_regs = entriesUnequalZero(s.regs);
+    REQUIRE(non_zero_regs.size() == 2);
+    REQUIRE(non_zero_regs.at(0x4) == 0x6);
+    REQUIRE(non_zero_regs.at(0x7) == 0x9);
+    REQUIRE(old_pc == s.pc);
+  }
+  SECTION("EX9E - Skip if key pressed") {
+    auto old_pc = s.pc;
+
+    s.regs[0x6] = 0xF;
+    processInstruction(0xE69E, s);
+    REQUIRE(s.pc == old_pc);
+
+    s.key = 0xF;
+    processInstruction(0xE69E, s);
+    REQUIRE(s.pc == old_pc + OPCODE_SIZE_WORDS);
+  }
+  SECTION("EXA1 - Skip if key not pressed") {
+    auto old_pc = s.pc;
+
+    s.regs[0x6] = 0xF;
+    processInstruction(0xE6A1, s);
+    REQUIRE(s.pc == old_pc + OPCODE_SIZE_WORDS);
+
+    s.key = 0xF;
+    processInstruction(0xE6A1, s);
+    REQUIRE(s.pc == old_pc + OPCODE_SIZE_WORDS);
+  }
+}

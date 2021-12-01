@@ -24,6 +24,7 @@ Screen Game::screen() const {
 bool Game::next() {
   auto next_opcode = nextOpcode(*state_);
   processInstruction(next_opcode, *state_);
+  // TODO: set this properly
   return true;
 }
 

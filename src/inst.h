@@ -55,10 +55,12 @@ void Inst_DXYN(Opcode opcode, RegsT& regs, const Memory& mem,
                const Memory::Index& i, Display& dis);
 
 // skip if key is pressed
-void Inst_EX9E(Opcode opcode, const RegsT& regs, Memory::Index& pc);
+void Inst_EX9E(Opcode opcode, const std::optional<KeyT>& key, const RegsT& regs,
+               Memory::Index& pc);
 
 // skip if key is not pressed
-void Inst_EXA1(Opcode opcode, const RegsT& regs, Memory::Index& pc);
+void Inst_EXA1(Opcode opcode, const std::optional<KeyT>& key, const RegsT& regs,
+               Memory::Index& pc);
 
 // read delay timer
 void Inst_FX07(Opcode opcode, const TimerT& delay_timer, RegsT& regs);
@@ -73,7 +75,8 @@ void Inst_FX18(Opcode opcode, const RegsT& regs, TimerT& sound_timer);
 void Inst_FX1E(Opcode opcode, const RegsT& regs, Memory::Index& i);
 
 // get key
-void Inst_FX0A(Opcode opcode, RegsT& regs, Memory::Index& pc);
+void Inst_FX0A(Opcode opcode, const std::optional<KeyT>& key, RegsT& regs,
+               Memory::Index& pc);
 
 // sets I to font character
 void Inst_FX29(Opcode opcode, const RegsT& regs, const Memory& mem,

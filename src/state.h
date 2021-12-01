@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <optional>
 
 #include "disp.h"
 #include "mem.h"
@@ -12,6 +13,8 @@ using RegT = uint8_t;
 constexpr auto NUM_REGS = 16;
 using RegsT = std::array<RegT, NUM_REGS>;
 
+using KeyT = uint8_t;
+
 struct State {
   Memory mem;
   Display display;
@@ -21,4 +24,5 @@ struct State {
   StackT stack;
   TimerT delayTimer;
   TimerT soundTimer;
+  std::optional<KeyT> key; // wether a key has been pressed
 };

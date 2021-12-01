@@ -84,11 +84,27 @@ void processInstruction(Opcode opcode, State& state) {
     case 0xD:
       Inst_DXYN(opcode, state.regs, state.mem, state.i, state.display);
       break;
+    case 0xE:
+      switch (lastTwo(opcode)) {
+        case 0x9E:
+          Inst_EX9E(opcode, state.key, state.regs, state.pc);
+          break;
+        case 0xA1:
+          Inst_EXA1(opcode, state.key, state.regs, state.pc);
+          break;
+      }
+      break;
     case 0xF:
-      if (lastTwo(opcode) == 0x55) {
-        Inst_FX55(opcode, state.regs, state.i, state.mem);
-      } else {
-        Inst_FX65(opcode, state.i, state.mem, state.regs);
+      switch (lastTwo(opcode)) {
+        case 0x55:
+          Inst_FX55(opcode, state.regs, state.i, state.mem);
+          break;
+        case 0x65:
+          Inst_FX65(opcode, state.i, state.mem, state.regs);
+          break;
+        case 0x0A:
+          Inst_FX0A(opcode, state.key, state.regs, state.pc);
+          break;
       }
       break;
     default:

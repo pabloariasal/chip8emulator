@@ -162,17 +162,24 @@ void Inst_DXYN(Opcode opcode, RegsT& regs, const Memory& mem,
 }
 
 // skip if key is pressed
-void Inst_EX9E(Opcode opcode, const RegsT& regs, Memory::Index& pc) {
-  (void)regs;
-  (void)pc;
-  (void)opcode;
+void Inst_EX9E(Opcode opcode, const std::optional<KeyT>& key, const RegsT& regs,
+               Memory::Index& pc) {
+  if (!key) {
+    return;
+  }
+  auto reg = second(opcode);
+  if (*key == regs.at(reg)) {
+    pc += OPCODE_SIZE_WORDS;
+  }
 }
 
 // skip if key is not pressed
-void Inst_EXA1(Opcode opcode, const RegsT& regs, Memory::Index& pc) {
-  (void)regs;
-  (void)pc;
-  (void)opcode;
+void Inst_EXA1(Opcode opcode, const std::optional<KeyT>& key, const RegsT& regs,
+               Memory::Index& pc) {
+  auto reg = second(opcode);
+  if (!key || regs.at(reg) != *key) {
+    pc += OPCODE_SIZE_WORDS;
+  }
 }
 
 // read delay timer
@@ -204,10 +211,15 @@ void Inst_FX1E(Opcode opcode, const RegsT& regs, Memory::Index& i) {
 }
 
 // get key
-void Inst_FX0A(Opcode opcode, RegsT& regs, Memory::Index& pc) {
-  (void)opcode;
-  (void)regs;
-  (void)pc;
+void Inst_FX0A(Opcode opcode, const std::optional<KeyT>& key, RegsT& regs,
+               Memory::Index& pc) {
+  if (!key) {
+    // if no key pressed just block
+    pc -= OPCODE_SIZE_WORDS;
+    return;
+  }
+  auto reg = second(opcode);
+  regs[reg] = *key;
 }
 
 // sets I to font character
