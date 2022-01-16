@@ -24,5 +24,5 @@ struct State {
   StackT stack;
   TimerT delayTimer;
   TimerT soundTimer;
-  std::optional<KeyT> key; // wether a key has been pressed
+  std::optional<KeyT> key;  // wether a key has been pressed
 };

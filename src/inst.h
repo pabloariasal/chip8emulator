@@ -79,8 +79,7 @@ void Inst_FX0A(Opcode opcode, const std::optional<KeyT>& key, RegsT& regs,
                Memory::Index& pc);
 
 // sets I to font character
-void Inst_FX29(Opcode opcode, const RegsT& regs, const Memory& mem,
-               Memory::Index& i);
+void Inst_FX29(Opcode opcode, const RegsT& regs, Memory::Index& i);
 
 // stores decimal in memory at location I
 void Inst_FX33(Opcode opcode, const RegsT& regs, const Memory::Index& i,

@@ -105,6 +105,9 @@ void processInstruction(Opcode opcode, State& state) {
         case 0x0A:
           Inst_FX0A(opcode, state.key, state.regs, state.pc);
           break;
+        case 0x29:
+          Inst_FX29(opcode, state.regs, state.i);
+          break;
       }
       break;
     default:

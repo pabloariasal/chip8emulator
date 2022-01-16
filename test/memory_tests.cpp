@@ -5,8 +5,13 @@
 
 TEST_CASE("Memory Tests") {
   Memory mem;
+  SECTION("Mem Initialization") {
+    const auto all_locs = readN(mem, 0, Memory::MEM_SIZE);
+    REQUIRE(std::all_of(all_locs.cbegin(), all_locs.cend(),
+                        [](const auto& n) { return n == 0x0; }));
+  }
 
-  SECTION("ROM loading") {
+  SECTION("ROM Loading") {
     std::istringstream stream("abc");
 
     mem.loadROM(stream);
@@ -29,5 +34,10 @@ TEST_CASE("Memory Tests") {
     mem.write(11, 2);
     mem.write(12, 3);
     REQUIRE(readN(mem, 10, 4) == std::vector<Memory::Word>{1, 2, 3, 0});
+  }
+  SECTION("Font Loading") {
+    mem.loadFonts();
+    REQUIRE(mem.read(Memory::FONTS_BEGIN) == 0xF0);
+    REQUIRE(mem.read(Memory::FONTS_BEGIN + (5 * 16) - 1) == 0x80);
   }
 }

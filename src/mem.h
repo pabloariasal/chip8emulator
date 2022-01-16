@@ -6,15 +6,19 @@
 
 class Memory {
  public:
-  Memory() : mem_(4096, 0) {}
   using Index = uint16_t;
   using Word = uint8_t;
 
   constexpr static auto MEM_SIZE = 4096;
   constexpr static Index ROM_BEGIN = 0x200;
+  constexpr static Index FONTS_BEGIN = 0x50;
+  constexpr static Index FONT_SPRITE_WIDTH = 5;
+  constexpr static Index FONTS_LENGTH = 16;
+
+  Memory();
 
   bool loadROM(std::istream& istream);
-
+  void loadFonts();
   void write(Index i, Word w) { mem_[i] = w; };
   Word read(Index i) const { return mem_[i]; };
 

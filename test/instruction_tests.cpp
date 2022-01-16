@@ -399,3 +399,22 @@ TEST_CASE("FX0A - Key Input") {
     REQUIRE(s.pc == old_pc + OPCODE_SIZE_WORDS);
   }
 }
+TEST_CASE("FX29 - Font character") {
+  auto s = State{};
+  s.mem.loadFonts();
+
+  SECTION("FX29 - Set i to the address of character 0") {
+    s.regs[0xC] = 0x1;
+    processInstruction(0xFC29, s);
+    auto character_zero_sprite = readN(s.mem, s.i, Memory::FONT_SPRITE_WIDTH);
+    REQUIRE(character_zero_sprite ==
+            std::vector<Memory::Word>{0x20, 0x60, 0x20, 0x20, 0x70});
+  }
+  SECTION("FX29 - Set i to the address of character A") {
+    s.regs[0xA] = 0xA;
+    processInstruction(0xFA29, s);
+    auto character_A_sprite = readN(s.mem, s.i, Memory::FONT_SPRITE_WIDTH);
+    REQUIRE(character_A_sprite ==
+            std::vector<Memory::Word>{0xF0, 0x90, 0xF0, 0x90, 0x90});
+  }
+}

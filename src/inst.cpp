@@ -223,12 +223,9 @@ void Inst_FX0A(Opcode opcode, const std::optional<KeyT>& key, RegsT& regs,
 }
 
 // sets I to font character
-void Inst_FX29(Opcode opcode, const RegsT& regs, const Memory& mem,
-               Memory::Index& i) {
-  (void)opcode;
-  (void)regs;
-  (void)i;
-  (void)mem;
+void Inst_FX29(Opcode opcode, const RegsT& regs, Memory::Index& i) {
+  auto reg = second(opcode);
+  i = Memory::FONTS_BEGIN + Memory::FONT_SPRITE_WIDTH * regs[reg];
 }
 
 // stores decimal in memory at location I
