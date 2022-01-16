@@ -86,16 +86,19 @@ void Inst_8XY1(Opcode opcode, RegsT& regs) {
   auto to = second(opcode);
   regs[to] |= regs.at(from);
 }
+
 void Inst_8XY2(Opcode opcode, RegsT& regs) {
   auto from = third(opcode);
   auto to = second(opcode);
   regs[to] &= regs.at(from);
 }
+
 void Inst_8XY3(Opcode opcode, RegsT& regs) {
   auto from = third(opcode);
   auto to = second(opcode);
   regs[to] ^= regs.at(from);
 }
+
 void Inst_8XY4(Opcode opcode, RegsT& regs) {
   auto from = third(opcode);
   auto to = second(opcode);
@@ -105,6 +108,7 @@ void Inst_8XY4(Opcode opcode, RegsT& regs) {
   }
   regs[to] += regs.at(from);
 }
+
 void Inst_8XY5(Opcode opcode, RegsT& regs) {
   auto from = third(opcode);
   auto to = second(opcode);
