@@ -25,4 +25,4 @@ void Timer::update() {
 int Timer::get() const { return count_; }
 
 bool Timer::done() const { return count_ <= 0; }
-bool Timer::running() const {return count_ > 0;}
+bool Timer::running() const { return count_ > 0; }

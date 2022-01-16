@@ -1,6 +1,7 @@
 #pragma once
 
 #include <inttypes.h>
+
 #include <chrono>
 
 class Timer {

@@ -4,8 +4,8 @@
 #include <memory>
 
 #include "color.h"
-#include "state.h"
 #include "sound.h"
+#include "state.h"
 
 struct Screen {
   int width;

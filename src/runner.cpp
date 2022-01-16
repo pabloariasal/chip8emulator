@@ -22,7 +22,6 @@ void Runner::run(const std::filesystem::path& rom) {
     if (game.next()) {
       window.render(game.screen().data, game.screen().width);
     }
-
   }
 }
 
