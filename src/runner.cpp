@@ -26,7 +26,6 @@ void Runner::run(const std::filesystem::path& rom) {
 }
 
 bool Runner::handleEvents(Game& game) {
-  (void)game;
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
     switch (event.type) {
