@@ -84,6 +84,9 @@ void processInstruction(Opcode opcode, State& state) {
     case 0xB:
       Inst_BNNN(opcode, state.regs, state.pc);
       break;
+    case 0xC:
+      Inst_CXNN(opcode, state.regs);
+      break;
     case 0xD:
       Inst_DXYN(opcode, state.regs, state.mem, state.i, state.display);
       break;
@@ -95,6 +98,8 @@ void processInstruction(Opcode opcode, State& state) {
         case 0xA1:
           Inst_EXA1(opcode, state.key, state.regs, state.pc);
           break;
+        default:
+          assert(false);
       }
       break;
     case 0xF:
@@ -126,6 +131,8 @@ void processInstruction(Opcode opcode, State& state) {
         case 0x18:
           Inst_FX18(opcode, state.regs, state.soundTimer);
           break;
+        default:
+          assert(false);
       }
       break;
     default:

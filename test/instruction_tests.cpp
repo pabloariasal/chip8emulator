@@ -488,3 +488,21 @@ TEST_CASE("FX07/FX15/FX18 - Timers") {
     REQUIRE(s.soundTimer.get() == 0x43);
   }
 }
+
+TEST_CASE("CXNN - Random") {
+  auto s = State{};
+  SECTION("CXNN - Generate random numbers") {
+    std::unordered_set<uint8_t> set;
+    for (int i = 0; i < 20; ++i) {
+      processInstruction(0xCAFF, s);
+      set.insert(s.regs.at(0xA));
+    }
+    REQUIRE(set.size() > 1);
+  }
+  SECTION("CXNN - Generated random number is masked") {
+    processInstruction(0xCA03, s);
+    auto non_zero_regs = entriesUnequalZero(s.regs);
+    REQUIRE(non_zero_regs.size() == 1);
+    REQUIRE(non_zero_regs.at(0xA) <= 0x3);
+  }
+}

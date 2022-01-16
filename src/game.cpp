@@ -14,6 +14,8 @@ Game::Game(const std::filesystem::path& rom)
   }
   state_->mem.loadROM(is);
   is.close();
+
+  state_->mem.loadFonts();
 }
 
 Screen Game::screen() const {

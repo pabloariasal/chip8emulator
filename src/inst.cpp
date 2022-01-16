@@ -2,7 +2,7 @@
 
 #include <inttypes.h>
 
-#include <iostream>
+#include <random>
 
 #include "draw_sprite.h"
 #include "opcode.h"
@@ -154,8 +154,13 @@ void Inst_BNNN(Opcode opcode, const RegsT& regs, Memory::Index& pc) {
 
 // Generate random number
 void Inst_CXNN(Opcode opcode, RegsT& regs) {
-  (void)regs;
-  (void)opcode;
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_int_distribution<uint8_t> distrib(0x00, 0xFF);
+
+  auto reg = second(opcode);
+  auto mask = lastTwo(opcode);
+  regs[reg] = mask & distrib(gen);
 }
 
 // draw sprite
