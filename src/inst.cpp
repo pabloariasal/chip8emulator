@@ -215,9 +215,8 @@ void Inst_FX18(Opcode opcode, const RegsT& regs, TimerT& sound_timer) {
 
 // Adds to register I
 void Inst_FX1E(Opcode opcode, const RegsT& regs, Memory::Index& i) {
-  (void)opcode;
-  (void)regs;
-  (void)i;
+  auto reg = second(opcode);
+  i += regs[reg];
 }
 
 // get key

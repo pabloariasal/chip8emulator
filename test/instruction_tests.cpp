@@ -456,3 +456,13 @@ TEST_CASE("FX33 - Decimal conversion") {
     REQUIRE(readN(s.mem, s.i, 3) == std::vector<Memory::Word>{2, 5, 5});
   }
 }
+
+TEST_CASE("FX1E - Add to register I") {
+  auto s = State{};
+  SECTION("Add to register I") {
+    s.i = 0x4;
+    s.regs[0x8] = 0x5;
+    processInstruction(0xF81E, s);
+    REQUIRE(s.i == 0x9);
+  }
+}
