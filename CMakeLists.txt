@@ -15,7 +15,6 @@ include(${CMAKE_BINARY_DIR}/conan.cmake)
 
 conan_cmake_configure(REQUIRES
                           catch2/2.13.7
-                          sdl/2.0.16
                       GENERATORS cmake_find_package
                       OPTIONS catch2:with_main=True)
 
@@ -49,6 +48,8 @@ target_sources(chip8_lib
     src/process_instruction.cpp
     src/game.cpp
     src/sdl_window.cpp
+    src/timer.cpp
+    src/sound.cpp
     )
 target_include_directories(chip8_lib PUBLIC src 3rdparty)
 target_link_libraries(chip8_lib PUBLIC SDL2::SDL2)

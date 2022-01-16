@@ -467,3 +467,24 @@ TEST_CASE("FX33 - Decimal conversion") {
     REQUIRE(readN(s.mem, s.i, 3) == std::vector<Memory::Word>{2, 5, 5});
   }
 }
+
+TEST_CASE("FX07/FX15/FX18 - Timers") {
+  auto s = State{};
+  SECTION("FX15 set delay timer") {
+    s.regs[0x5] = 0x35;
+    processInstruction(0xF515, s);
+    REQUIRE(s.delayTimer.get() == 0x35);
+  }
+  SECTION("FX07 read delay timer") {
+    s.delayTimer.reset(0x66);
+    processInstruction(0xF607, s);
+    auto non_zero_regs = entriesUnequalZero(s.regs);
+    REQUIRE(non_zero_regs.size() == 1);
+    REQUIRE(non_zero_regs.at(6) == 0x66);
+  }
+  SECTION("FX18 set sound timer") {
+    s.regs[0xA] = 0x43;
+    processInstruction(0xFA18, s);
+    REQUIRE(s.soundTimer.get() == 0x43);
+  }
+}

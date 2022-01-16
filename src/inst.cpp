@@ -192,24 +192,21 @@ void Inst_EXA1(Opcode opcode, const std::optional<KeyT>& key, const RegsT& regs,
 }
 
 // read delay timer
-void Inst_FX07(Opcode opcode, const TimerT& delay_timer, RegsT& regs) {
-  (void)opcode;
-  (void)delay_timer;
-  (void)regs;
+void Inst_FX07(Opcode opcode, const Timer& delay_timer, RegsT& regs) {
+  auto reg = second(opcode);
+  regs[reg] = delay_timer.get();
 }
 
 // set delay timer
-void Inst_FX15(Opcode opcode, const RegsT& regs, TimerT& delay_timer) {
-  (void)opcode;
-  (void)delay_timer;
-  (void)regs;
+void Inst_FX15(Opcode opcode, const RegsT& regs, Timer& delay_timer) {
+  auto reg = second(opcode);
+  delay_timer.reset(regs[reg]);
 }
 
 // set sound timer
-void Inst_FX18(Opcode opcode, const RegsT& regs, TimerT& sound_timer) {
-  (void)opcode;
-  (void)sound_timer;
-  (void)regs;
+void Inst_FX18(Opcode opcode, const RegsT& regs, Timer& sound_timer) {
+  auto reg = second(opcode);
+  sound_timer.reset(regs[reg]);
 }
 
 // Adds to register I

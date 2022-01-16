@@ -63,13 +63,13 @@ void Inst_EXA1(Opcode opcode, const std::optional<KeyT>& key, const RegsT& regs,
                Memory::Index& pc);
 
 // read delay timer
-void Inst_FX07(Opcode opcode, const TimerT& delay_timer, RegsT& regs);
+void Inst_FX07(Opcode opcode, const Timer& delay_timer, RegsT& regs);
 
 // set delay timer
-void Inst_FX15(Opcode opcode, const RegsT& regs, TimerT& delay_timer);
+void Inst_FX15(Opcode opcode, const RegsT& regs, Timer& delay_timer);
 
 // set sound timer
-void Inst_FX18(Opcode opcode, const RegsT& regs, TimerT& sound_timer);
+void Inst_FX18(Opcode opcode, const RegsT& regs, Timer& sound_timer);
 
 // Adds to register I
 void Inst_FX1E(Opcode opcode, const RegsT& regs, Memory::Index& i);

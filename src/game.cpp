@@ -24,11 +24,24 @@ Screen Game::screen() const {
 bool Game::next() {
   auto next_opcode = nextOpcode(*state_);
   processInstruction(next_opcode, *state_);
-  // TODO: set this properly
+  updateTimers();
+  // TODO: this should only be true if the screen must be redrawn
   return true;
 }
 
 void Game::keyPressed(KeyT key) {
   state_->key = key;
   std::cout << "key pressed: " << std::to_string(key) << std::endl;
+}
+
+void Game::updateTimers() {
+  state_->delayTimer.update();
+  state_->soundTimer.update();
+
+  if (state_->soundTimer.running()) {
+    sound_.play();
+  }
+  if (state_->soundTimer.done()) {
+    sound_.stop();
+  }
 }

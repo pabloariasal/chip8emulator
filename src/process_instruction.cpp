@@ -117,6 +117,15 @@ void processInstruction(Opcode opcode, State& state) {
         case 0x1E:
           Inst_FX1E(opcode, state.regs, state.i);
           break;
+        case 0x07:
+          Inst_FX07(opcode, state.delayTimer, state.regs);
+          break;
+        case 0x15:
+          Inst_FX15(opcode, state.regs, state.delayTimer);
+          break;
+        case 0x18:
+          Inst_FX18(opcode, state.regs, state.soundTimer);
+          break;
       }
       break;
     default:

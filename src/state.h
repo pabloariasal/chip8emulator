@@ -22,7 +22,7 @@ struct State {
   Memory::Index pc{Memory::ROM_BEGIN};
   Memory::Index i;
   StackT stack;
-  TimerT delayTimer;
-  TimerT soundTimer;
+  Timer delayTimer{};
+  Timer soundTimer{};
   std::optional<KeyT> key;  // wether a key has been pressed
 };
