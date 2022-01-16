@@ -124,13 +124,19 @@ void Inst_8XY7(Opcode opcode, RegsT& regs) {
   }
   regs[to] = regs.at(from) - regs.at(to);
 }
+
 void Inst_8XY6(Opcode opcode, RegsT& regs) {
-  (void)regs;
-  (void)opcode;
+  auto reg = second(opcode);
+  auto val = regs[reg];
+  regs[0xF] = 0x01 & val;
+  regs[reg] = val >> 1;
 }
+
 void Inst_8XYE(Opcode opcode, RegsT& regs) {
-  (void)regs;
-  (void)opcode;
+  auto reg = second(opcode);
+  auto val = regs[reg];
+  regs[0xF] = val >> 7;
+  regs[reg] = val << 1;
 }
 
 // set index register I to NNN

@@ -434,3 +434,29 @@ TEST_CASE("FX33 - Decimal conversion") {
     REQUIRE(readN(s.mem, s.i, 3) == std::vector<Memory::Word>{2, 5, 5});
   }
 }
+
+TEST_CASE("8XY6/8XYE - Shift") {
+  auto s = State{};
+  SECTION("8XY6 - Shift to the right") {
+    s.regs[0x5] = 0x8;  // 00001000
+    processInstruction(0x8506, s);
+    REQUIRE(s.regs[0x5] == 0x4);
+    REQUIRE(s.regs[0xF] == 0x0);
+
+    s.regs[0x4] = 0x9;  // 00001001
+    processInstruction(0x8406, s);
+    REQUIRE(s.regs[0x4] == 0x4);
+    REQUIRE(s.regs[0xF] == 0x1);
+  }
+  SECTION("8XYE - Shift to the left") {
+    s.regs[0x5] = 0x8;  // 00001000
+    processInstruction(0x850E, s);
+    REQUIRE(s.regs[0x5] == 0x10);
+    REQUIRE(s.regs[0xF] == 0x0);
+
+    s.regs[0x4] = 0x88;  // 10001000
+    processInstruction(0x840E, s);
+    REQUIRE(s.regs[0x4] == 0x10);
+    REQUIRE(s.regs[0xF] == 0x1);
+  }
+}
