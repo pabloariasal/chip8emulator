@@ -81,6 +81,9 @@ void processInstruction(Opcode opcode, State& state) {
     case 0xA:
       Inst_ANNN(opcode, state.i);
       break;
+    case 0xB:
+      Inst_BNNN(opcode, state.regs, state.pc);
+      break;
     case 0xD:
       Inst_DXYN(opcode, state.regs, state.mem, state.i, state.display);
       break;

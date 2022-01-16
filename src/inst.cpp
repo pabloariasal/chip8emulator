@@ -148,9 +148,8 @@ void Inst_ANNN(Opcode opcode, Memory::Index& i) { i = lastThree(opcode); }
 
 // jump with offset (table lookup)
 void Inst_BNNN(Opcode opcode, const RegsT& regs, Memory::Index& pc) {
-  (void)pc;
-  (void)regs;
-  (void)opcode;
+  auto val = regs[0x0];
+  pc = val + lastThree(opcode);
 }
 
 // Generate random number

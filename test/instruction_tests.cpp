@@ -118,6 +118,12 @@ TEST_CASE("6XNN/7XNN/ANNN - Registers") {
     processInstruction(0xAFFF, s);
     REQUIRE(s.i == 0xFFF);
   }
+  SECTION("Add to register I") {
+    s.i = 0x4;
+    s.regs[0x8] = 0x5;
+    processInstruction(0xF81E, s);
+    REQUIRE(s.i == 0x9);
+  }
 }
 
 namespace {
@@ -257,7 +263,7 @@ TEST_CASE("Skip Control Flow - 3XNN/4XNN/5XY0/9XY0") {
   }
 }
 
-TEST_CASE("00EE/2NNN Subroutines") {
+TEST_CASE("00EE/2NNN/BNNN Subroutines") {
   auto s = State{};
   s.mem.write(0x444, 0x12);
   s.pc = 0x111;
@@ -276,6 +282,11 @@ TEST_CASE("00EE/2NNN Subroutines") {
     processInstruction(0x00EE, s);
     REQUIRE(s.stack.empty());
     REQUIRE(s.pc == 0x111);
+  }
+  SECTION("BNNN - Jump with offset") {
+    s.regs[0x0] = 0x66;
+    processInstruction(0xB034, s);
+    REQUIRE(s.pc == 0x9A);
   }
 }
 
@@ -454,15 +465,5 @@ TEST_CASE("FX33 - Decimal conversion") {
     s.regs[0x8] = 0xFF;
     processInstruction(0xF833, s);
     REQUIRE(readN(s.mem, s.i, 3) == std::vector<Memory::Word>{2, 5, 5});
-  }
-}
-
-TEST_CASE("FX1E - Add to register I") {
-  auto s = State{};
-  SECTION("Add to register I") {
-    s.i = 0x4;
-    s.regs[0x8] = 0x5;
-    processInstruction(0xF81E, s);
-    REQUIRE(s.i == 0x9);
   }
 }
