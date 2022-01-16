@@ -224,6 +224,7 @@ void Inst_FX0A(Opcode opcode, const std::optional<KeyT>& key, RegsT& regs,
 
 // sets I to font character
 void Inst_FX29(Opcode opcode, const RegsT& regs, Memory::Index& i) {
+  // TODO: what if value in Vx bigger than 15?
   auto reg = second(opcode);
   i = Memory::FONTS_BEGIN + Memory::FONT_SPRITE_WIDTH * regs[reg];
 }
@@ -231,10 +232,10 @@ void Inst_FX29(Opcode opcode, const RegsT& regs, Memory::Index& i) {
 // stores decimal in memory at location I
 void Inst_FX33(Opcode opcode, const RegsT& regs, const Memory::Index& i,
                Memory& mem) {
-  (void)opcode;
-  (void)regs;
-  (void)i;
-  (void)mem;
+  auto value = regs[second(opcode)];
+  mem.write(i + 2, value % 10);
+  mem.write(i + 1, (value / 10) % 10);
+  mem.write(i, (value / 100) % 10);
 }
 
 // write memory

@@ -399,11 +399,11 @@ TEST_CASE("FX0A - Key Input") {
     REQUIRE(s.pc == old_pc + OPCODE_SIZE_WORDS);
   }
 }
+
 TEST_CASE("FX29 - Font character") {
   auto s = State{};
   s.mem.loadFonts();
-
-  SECTION("FX29 - Set i to the address of character 0") {
+  SECTION("FX29 - Set i to the address of character 1") {
     s.regs[0xC] = 0x1;
     processInstruction(0xFC29, s);
     auto character_zero_sprite = readN(s.mem, s.i, Memory::FONT_SPRITE_WIDTH);
@@ -416,5 +416,21 @@ TEST_CASE("FX29 - Font character") {
     auto character_A_sprite = readN(s.mem, s.i, Memory::FONT_SPRITE_WIDTH);
     REQUIRE(character_A_sprite ==
             std::vector<Memory::Word>{0xF0, 0x90, 0xF0, 0x90, 0x90});
+  }
+}
+
+TEST_CASE("FX33 - Decimal conversion") {
+  auto s = State{};
+  SECTION("FX33 - Store decimal 156 digits in memory") {
+    s.i = 0x12;
+    s.regs[0x8] = 0x9C;
+    processInstruction(0xF833, s);
+    REQUIRE(readN(s.mem, s.i, 3) == std::vector<Memory::Word>{1, 5, 6});
+  }
+  SECTION("FX33 - Store decimal 255 digits in memory") {
+    s.i = 0x12;
+    s.regs[0x8] = 0xFF;
+    processInstruction(0xF833, s);
+    REQUIRE(readN(s.mem, s.i, 3) == std::vector<Memory::Word>{2, 5, 5});
   }
 }
