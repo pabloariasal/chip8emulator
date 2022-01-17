@@ -93,10 +93,10 @@ void processInstruction(Opcode opcode, State& state) {
     case 0xE:
       switch (lastTwo(opcode)) {
         case 0x9E:
-          Inst_EX9E(opcode, state.key, state.regs, state.pc);
+          Inst_EX9E(opcode, state.keys, state.regs, state.pc);
           break;
         case 0xA1:
-          Inst_EXA1(opcode, state.key, state.regs, state.pc);
+          Inst_EXA1(opcode, state.keys, state.regs, state.pc);
           break;
         default:
           assert(false);
@@ -111,7 +111,7 @@ void processInstruction(Opcode opcode, State& state) {
           Inst_FX65(opcode, state.i, state.mem, state.regs);
           break;
         case 0x0A:
-          Inst_FX0A(opcode, state.key, state.regs, state.pc);
+          Inst_FX0A(opcode, state.keys, state.regs, state.pc);
           break;
         case 0x29:
           Inst_FX29(opcode, state.regs, state.i);

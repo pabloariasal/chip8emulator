@@ -14,13 +14,19 @@ Runner::Runner() { SDL_Init(SDL_INIT_VIDEO); }
 void Runner::run(const std::filesystem::path& rom) {
   auto game = Game{rom};
   auto window = SDLWindow(game.screen().width, game.screen().height);
-
+  auto lastCycleTime = std::chrono::high_resolution_clock::now();
   while (true) {
     if (!handleEvents(game)) {
       break;
     }
-    if (game.next()) {
-      window.render(game.screen().data, game.screen().width);
+    auto currentTime = std::chrono::high_resolution_clock::now();
+    float dt = std::chrono::duration<float, std::chrono::milliseconds::period>(
+                   currentTime - lastCycleTime)
+                   .count();
+    if (dt > 4) {
+      if (game.next()) {
+        window.render(game.screen().data, game.screen().width);
+      }
     }
   }
 }
@@ -80,6 +86,58 @@ bool Runner::handleEvents(Game& game) {
             break;
           case SDLK_v:
             game.keyPressed(0xF);
+            break;
+        }
+        break;
+      case SDL_KEYUP:
+        switch (event.key.keysym.sym) {
+          case SDLK_1:
+            game.keyReleased(0x1);
+            break;
+          case SDLK_2:
+            game.keyReleased(0x2);
+            break;
+          case SDLK_3:
+            game.keyReleased(0x3);
+            break;
+          case SDLK_4:
+            game.keyReleased(0xC);
+            break;
+          case SDLK_q:
+            game.keyReleased(0x4);
+            break;
+          case SDLK_w:
+            game.keyReleased(0x5);
+            break;
+          case SDLK_e:
+            game.keyReleased(0x6);
+            break;
+          case SDLK_r:
+            game.keyReleased(0xD);
+            break;
+          case SDLK_a:
+            game.keyReleased(0x7);
+            break;
+          case SDLK_s:
+            game.keyReleased(0x8);
+            break;
+          case SDLK_d:
+            game.keyReleased(0x9);
+            break;
+          case SDLK_f:
+            game.keyReleased(0xE);
+            break;
+          case SDLK_z:
+            game.keyReleased(0xA);
+            break;
+          case SDLK_x:
+            game.keyReleased(0x0);
+            break;
+          case SDLK_c:
+            game.keyReleased(0xB);
+            break;
+          case SDLK_v:
+            game.keyReleased(0xF);
             break;
         }
         break;

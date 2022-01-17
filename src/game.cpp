@@ -27,13 +27,19 @@ bool Game::next() {
   auto next_opcode = nextOpcode(*state_);
   processInstruction(next_opcode, *state_);
   updateTimers();
+  /* printf("0x%04x\n", next_opcode); */
   // TODO: this should only be true if the screen must be redrawn
   return true;
 }
 
 void Game::keyPressed(KeyT key) {
-  state_->key = key;
+  state_->keys[key] = true;
   std::cout << "key pressed: " << std::to_string(key) << std::endl;
+}
+
+void Game::keyReleased(KeyT key) {
+  state_->keys[key] = false;
+  std::cout << "key released: " << std::to_string(key) << std::endl;
 }
 
 void Game::updateTimers() {

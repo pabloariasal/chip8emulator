@@ -387,6 +387,10 @@ TEST_CASE("Math/Arithmetic Intructions") {
 
 TEST_CASE("FX0A - Key Input") {
   auto s = State{};
+  SECTION("Keys are not pressed per default") {
+    REQUIRE(std::all_of(s.keys.cbegin(), s.keys.cend(),
+                        [](const auto x) { return !x; }));
+  }
   SECTION("Instruction blocks until a key is pressed") {
     auto old_pc = s.pc;
     processInstruction(0xF40A, s);
@@ -398,9 +402,10 @@ TEST_CASE("FX0A - Key Input") {
   }
   SECTION("Pressed key is stored in register") {
     auto old_pc = s.pc;
-    s.key = 0x6;
+    s.keys[0x6] = true;
     processInstruction(0xF40A, s);
-    s.key = 0x9;
+    s.keys[0x6] = false;
+    s.keys[0x9] = true;
     processInstruction(0xF70A, s);
 
     auto non_zero_regs = entriesUnequalZero(s.regs);
@@ -416,7 +421,7 @@ TEST_CASE("FX0A - Key Input") {
     processInstruction(0xE69E, s);
     REQUIRE(s.pc == old_pc);
 
-    s.key = 0xF;
+    s.keys[0xF] = true;
     processInstruction(0xE69E, s);
     REQUIRE(s.pc == old_pc + OPCODE_SIZE_WORDS);
   }
@@ -427,7 +432,7 @@ TEST_CASE("FX0A - Key Input") {
     processInstruction(0xE6A1, s);
     REQUIRE(s.pc == old_pc + OPCODE_SIZE_WORDS);
 
-    s.key = 0xF;
+    s.keys[0xF] = true;
     processInstruction(0xE6A1, s);
     REQUIRE(s.pc == old_pc + OPCODE_SIZE_WORDS);
   }

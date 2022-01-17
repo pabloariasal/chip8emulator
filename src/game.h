@@ -23,6 +23,7 @@ class Game {
   // Returns if the display has been invalidated
   bool next();
   void keyPressed(KeyT key);
+  void keyReleased(KeyT key);
 
  private:
   void updateTimers();

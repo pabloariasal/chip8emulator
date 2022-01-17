@@ -176,22 +176,19 @@ void Inst_DXYN(Opcode opcode, RegsT& regs, const Memory& mem,
 }
 
 // skip if key is pressed
-void Inst_EX9E(Opcode opcode, const std::optional<KeyT>& key, const RegsT& regs,
+void Inst_EX9E(Opcode opcode, const KeysT& keys, const RegsT& regs,
                Memory::Index& pc) {
-  if (!key) {
-    return;
-  }
   auto reg = second(opcode);
-  if (*key == regs.at(reg)) {
+  if (keys[regs.at(reg)]) {
     pc += OPCODE_SIZE_WORDS;
   }
 }
 
 // skip if key is not pressed
-void Inst_EXA1(Opcode opcode, const std::optional<KeyT>& key, const RegsT& regs,
+void Inst_EXA1(Opcode opcode, const KeysT& keys, const RegsT& regs,
                Memory::Index& pc) {
   auto reg = second(opcode);
-  if (!key || regs.at(reg) != *key) {
+  if (!keys[regs.at(reg)]) {
     pc += OPCODE_SIZE_WORDS;
   }
 }
@@ -221,15 +218,18 @@ void Inst_FX1E(Opcode opcode, const RegsT& regs, Memory::Index& i) {
 }
 
 // get key
-void Inst_FX0A(Opcode opcode, const std::optional<KeyT>& key, RegsT& regs,
+void Inst_FX0A(Opcode opcode, const KeysT& keys, RegsT& regs,
                Memory::Index& pc) {
-  if (!key) {
-    // if no key pressed just block
-    pc -= OPCODE_SIZE_WORDS;
-    return;
+  for (KeyT i = 0; i < 16; ++i) {
+    if (keys.at(i)) {
+      auto reg = second(opcode);
+      regs[reg] = i;
+      return;
+    }
   }
-  auto reg = second(opcode);
-  regs[reg] = *key;
+
+  // if no key pressed just block
+  pc -= OPCODE_SIZE_WORDS;
 }
 
 // sets I to font character

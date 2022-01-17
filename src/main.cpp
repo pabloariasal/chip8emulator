@@ -13,9 +13,6 @@ int main(int argc, char* argv[]) {
     exit(1);
   }
 
-  Sound s;
-  s.play();
   Runner().run(argv[1]);
-
   return 0;
 }
