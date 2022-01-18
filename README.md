@@ -5,12 +5,14 @@
 * SDL2
 * Sound
 * Fully tested
+* Conan for dependency management
+* clang-format
 
 # Screenshots
 
 ## Space Invaders
-![](screenshots/space_invaders1.png)
 ![](screenshots/space_invaders2.png)
+![](screenshots/space_invaders1.png)
 
 ## Pong
 ![](screenshots/pong.png)
