@@ -15,7 +15,8 @@
 ## Pong
 ![](screenshots/pong.png)
 
-# Test ROM - https://github.com/corax89/chip8-test-rom
+# Test ROM
+https://github.com/corax89/chip8-test-rom
 ![](screenshots/test.png)
 
 # Build
