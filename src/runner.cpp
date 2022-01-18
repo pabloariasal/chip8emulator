@@ -14,19 +14,12 @@ Runner::Runner() { SDL_Init(SDL_INIT_VIDEO); }
 void Runner::run(const std::filesystem::path& rom) {
   auto game = Game{rom};
   auto window = SDLWindow(game.screen().width, game.screen().height);
-  auto lastCycleTime = std::chrono::high_resolution_clock::now();
   while (true) {
     if (!handleEvents(game)) {
       break;
     }
-    auto currentTime = std::chrono::high_resolution_clock::now();
-    float dt = std::chrono::duration<float, std::chrono::milliseconds::period>(
-                   currentTime - lastCycleTime)
-                   .count();
-    if (dt > 4) {
-      if (game.next()) {
-        window.render(game.screen().data, game.screen().width);
-      }
+    if (game.next()) {
+      window.render(game.screen().data, game.screen().width);
     }
   }
 }

@@ -11,7 +11,7 @@ class Timer {
   bool running() const;
 
  private:
-  int count_;
-  long elapsed_ms_;
+  int total_{};
+  int count_{};
   std::chrono::time_point<std::chrono::steady_clock> last_update_;
 };
