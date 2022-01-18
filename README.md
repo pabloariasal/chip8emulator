@@ -15,7 +15,7 @@
 ## Pong
 ![](screenshots/pong.png)
 
-# Test ROM
+## Test ROM
 ![](screenshots/test.png)
 Taken from: https://github.com/corax89/chip8-test-rom
 
