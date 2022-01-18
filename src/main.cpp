@@ -8,8 +8,8 @@
 
 int main(int argc, char* argv[]) {
   if (argc != 2) {
-    std::cout << "usage "
-              << "program <rom>\n";
+    std::cout << "usage: \n"
+              << "  chip8 <path-to-rom>\n";
     exit(1);
   }
 

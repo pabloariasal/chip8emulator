@@ -6,9 +6,16 @@
 * Sound
 * Fully tested
 
-![](screenshots/pong.png)
+# Screenshots
+
+## Space Invaders
 ![](screenshots/space_invaders1.png)
 ![](screenshots/space_invaders2.png)
+
+## Pong
+![](screenshots/pong.png)
+
+# Test ROM - https://github.com/corax89/chip8-test-rom
 ![](screenshots/test.png)
 
 # Build
