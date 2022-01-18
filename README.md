@@ -8,8 +8,6 @@
 * Conan for dependency management
 * clang-format
 
-# Screenshots
-
 ## Space Invaders
 ![](screenshots/space_invaders2.png)
 ![](screenshots/space_invaders1.png)
